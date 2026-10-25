@@ -387,6 +387,40 @@ textarea[aria-invalid="true"] {
   font-weight: 500;
   color: #5d6a54;
 }
+.preview-parts {
+  margin: 20px 0;
+  display: grid;
+  gap: 7px;
+}
+.preview-parts > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px;
+  border: 1px solid #dde5d5;
+  border-radius: 5px;
+  background: #f2f5eb;
+  font-size: 11px;
+}
+.preview-parts small {
+  margin-left: auto;
+  color: #526340;
+  font-size: 9px;
+  white-space: nowrap;
+}
+.preview-parts .preview-gap {
+  background: #f8f1e3;
+  border-color: #dfd0af;
+}
+.preview-parts .preview-gap small {
+  color: #795c27;
+}
+.preview-open {
+  width: 14px;
+  text-align: center;
+  color: #795c27;
+  font-size: 10px;
+}
 .hand-arrow {
   font-family: Georgia, serif;
   color: #5d6a54;
@@ -2489,5 +2523,310 @@ code {
   .workspace-header .connection-button {
     max-width: 125px;
     font-size: 10px;
+  }
+}
+
+/* The question coach keeps gaps and applicant confirmations visible. */
+.coverage-card {
+  background: #fffefa;
+  border: 1px solid #d9dfcd;
+  border-radius: 12px;
+  padding: 25px 27px;
+  box-shadow: var(--shadow);
+}
+.coverage-heading .eyebrow {
+  color: #5d6a54;
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.coverage-heading h2 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.4px;
+  margin: 0 0 10px;
+}
+.coverage-heading p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #5d6a54;
+  margin-bottom: 19px;
+}
+.coverage-card .original-question {
+  margin-bottom: 14px;
+}
+.current-draft {
+  border: 1px solid #dfe4d4;
+  border-radius: 7px;
+  background: #f7f8f0;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+}
+.current-draft summary,
+.part-evidence summary {
+  font-size: 12px;
+  font-weight: 550;
+  color: #355844;
+  cursor: pointer;
+  min-height: 24px;
+}
+.current-draft p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: #52654a;
+  margin: 9px 0 0;
+  white-space: pre-wrap;
+}
+.coverage-explanation {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  background: #f3ecd8;
+  border: 1px solid #e6d8b8;
+  border-radius: 7px;
+  color: #715b30;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+.coverage-explanation svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.coverage-parts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.coverage-part {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e6d9;
+  border-radius: 8px;
+  background: #fbfcf6;
+}
+.coverage-part.active {
+  border-color: #9dac80;
+  background: #f1f5e7;
+}
+.coverage-part.accepted {
+  border-color: #c4d2ad;
+}
+.coverage-part.dismissed {
+  background: #f3f2ed;
+}
+.coverage-part-main {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: transparent;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+}
+.coverage-part-number {
+  width: 28px;
+  height: 28px;
+  background: #e6edda;
+  color: #4f6c40;
+  border: 1px solid #cfdcbe;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.coverage-part-main > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.coverage-part-main > svg {
+  flex-shrink: 0;
+  color: #5d6a54;
+}
+.coverage-part strong {
+  font-size: 12px;
+  font-weight: 600;
+  display: block;
+  line-height: 1.5;
+  margin-bottom: 3px;
+}
+.coverage-part q {
+  display: block;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #5d6a54;
+  quotes: "“" "”";
+}
+.coverage-part-status {
+  display: block;
+  font-size: 11px;
+  color: #715b30;
+  margin-top: 3px;
+}
+.coverage-part.accepted .coverage-part-status {
+  color: #42633a;
+}
+.coverage-part > .icon-button {
+  margin-right: 9px;
+  color: #607052;
+  flex-shrink: 0;
+}
+.coverage-confirm {
+  border-top: 1px solid #e5e9db;
+  padding-top: 16px;
+  margin-top: 17px;
+}
+.coverage-confirm p {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #5d6a54;
+  margin-bottom: 13px;
+}
+.coverage-confirm .button {
+  font-size: 12px;
+}
+.coverage-detail {
+  border-top: 1px solid #dfe5d2;
+  margin-top: 19px;
+  padding-top: 19px;
+}
+.coverage-detail-heading .eyebrow {
+  font-size: 10px;
+  color: #5d6a54;
+  margin-bottom: 8px;
+}
+.coverage-detail h3 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+.coverage-detail > label {
+  font-size: 12px;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 550;
+}
+.coverage-detail textarea {
+  font-size: 14px;
+  line-height: 1.8;
+  min-height: 100px;
+}
+.coverage-detail .fine-print {
+  font-size: 11px;
+  margin-top: 9px;
+  margin-bottom: 13px;
+  color: #5d6a54;
+}
+.part-evidence {
+  background: #f4f7eb;
+  border: 1px solid #dce5ce;
+  border-radius: 6px;
+  padding: 10px 13px;
+  margin-top: 10px;
+}
+.part-evidence blockquote {
+  margin: 8px 0;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #516449;
+}
+.coverage-build {
+  background: #edf3e0;
+  border: 1px solid #d8e4c5;
+  border-radius: 9px;
+  padding: 19px;
+  text-align: left;
+  margin-top: 18px;
+  color: #35573d;
+}
+.coverage-build h3 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 24px;
+  font-weight: 400;
+  margin: 9px 0;
+}
+.coverage-build p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #5d6a54;
+}
+.coverage-build .button {
+  font-size: 12px;
+  white-space: normal;
+}
+.coverage-build .text-button {
+  display: block;
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: left;
+  margin-top: 9px;
+}
+.coverage-remove {
+  font-size: 11px;
+  color: #5d6a54;
+  margin-top: 15px;
+  line-height: 1.7;
+  text-align: left;
+}
+.simple-sample-link {
+  display: flex;
+  font-size: 12px;
+  margin-top: 4px;
+  color: #5d6a54;
+}
+.hero-actions .button.large {
+  font-size: 13px;
+  padding-left: 17px;
+  padding-right: 17px;
+}
+@media (max-width: 560px) {
+  .coverage-card {
+    padding: 20px 17px;
+  }
+  .coverage-heading h2 {
+    font-size: 27px;
+  }
+  .coverage-heading .eyebrow {
+    font-size: 10px;
+  }
+  .coverage-part-main {
+    padding: 11px 10px;
+    gap: 8px;
+  }
+  .coverage-part strong {
+    font-size: 12px;
+  }
+  .coverage-part q {
+    font-size: 11px;
+  }
+  .coverage-part-number {
+    width: 25px;
+    height: 25px;
+  }
+  .coverage-confirm .button {
+    white-space: normal;
+    width: 100%;
+    min-height: 48px;
+  }
+  .coverage-detail h3 {
+    font-size: 25px;
+  }
+  .coverage-part > .icon-button {
+    margin-right: 3px;
+    min-width: 30px;
+  }
+  .coverage-build .button {
+    width: 100%;
+  }
+  .hero-actions .button.large {
+    font-size: 12px;
   }
 }

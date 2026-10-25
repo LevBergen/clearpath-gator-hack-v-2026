@@ -28,7 +28,7 @@ fi
 echo "Repository name: clearpath-gator-hack-v-2026"
 read -r "reply?Type PUBLISH to make the code public, or anything else to cancel: "
 if [ "$reply" != "PUBLISH" ]; then exit 0; fi
-gh repo create clearpath-gator-hack-v-2026 --public --source=. --push --description "Clearpath: source-linked application drafting with Gemma 4. Built at Gator Hack V 2026."
+gh repo create clearpath-gator-hack-v-2026 --public --source=. --push --description "Clearpath: application question coaching with Gemma 4. Built at Gator Hack V 2026."
 echo ""
 echo "Code published. Return to Codex with the repository URL to prepare the hosted demo."
 read -r "reply?Press Return to close. "

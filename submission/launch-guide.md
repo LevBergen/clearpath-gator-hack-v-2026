@@ -1,12 +1,19 @@
-# Owner's final publication steps
+# Finish before 11 AM today
 
-Everything here is prepared locally. Nothing is public until you take these steps.
+Target: **before 11 AM Eastern, Sunday, October 25, 2026**. The official submission deadline is **5 PM Eastern**. The code, app, and video still need their final public links. Lev performs the publication, deployment, upload, and Devpost submission.
 
-1. Try the app at http://127.0.0.1:4173. Review the video, gallery, and devpost.md. Confirm the real team/department details and any organizer policy on AI assistance.
-2. To make the reviewed source public, open **Publish code.command** in the project folder and type **PUBLISH**. It creates a public GitHub repository using the already signed-in GitHub CLI. It does not deploy or submit anything. If you prefer GitHub Desktop, publish this local repository publicly there instead; keep .env excluded.
-3. In Render, create a new Blueprint from that repository. The prepared render.yaml uses one free Node web service. When prompted, paste the same GEMINI_API_KEY into Render's secret field. Check the new service name and the free plan before the final deploy action. Do not point this Blueprint at the existing TnT service.
-4. Open the deployed URL and perform a fictional sample → live draft → fill amount → review → download rehearsal. Keep localhost out of Devpost's public links. Return the real repository/demo URLs to Codex so the prepared submission copy can use them.
-5. Upload clearpath-demo.mp4 to YouTube or Vimeo. It uses clearly disclosed synthetic narration and a real model call with the wait retained. You can replace the voice with your own narration using demo-script.md. Check playback and visibility before using the link.
-6. Add the actual public repo URL, deployed app URL, video URL, thumbnail.png, and gallery images to Devpost. Add the real registered partner. Check prize selections, especially the event's two-department requirement and any challenge announcement. You personally click Submit before Sunday October 25, 5 PM Eastern; target 2 PM for buffer.
+1. **Check the final local version.** Open [the app](http://127.0.0.1:4173) and try the missing-details challenge. The question asks about the expense, coursework, amount, and other help tried. Check the proposed breakdown, confirm the two supported details, supply the two missing ones, build the answer, review, and download. Review `submission/devpost.md` and the latest gallery.
 
-The MIT license covers our application code. Gemma is used through Google's API, with the exact model named in README.md. We do not claim Twinly integration or a completed user study.
+2. **Publish the code.** The final source must be reviewed and committed locally first. Open **Publish code.command** in the project folder and type **PUBLISH** to create the public GitHub repository through the signed-in GitHub CLI. If it reports uncommitted changes, return to Codex for local preparation. Keep `.env` excluded. The command publishes code only.
+
+3. **Deploy the separate app.** In Render, create a new Blueprint from that repository. `render.yaml` prepares a Node web service on the free plan. Enter `GEMINI_API_KEY` in Render's secret field, check the new service and plan, then deploy. Use a separate service from TnT. Once it is ready, run the fictional challenge on the deployed app, including a real Gemma draft and reviewed download. Copy the working app and repository URLs.
+
+4. **Check and upload the replacement video.** Use the finished version demonstrating the missing amount and other help tried. The finished 2-minute-15-second recording uses Gemini 3.8 with the Orus male voice, with synthetic narration disclosed. Before upload, check the finished file's playback, audio, disclosure, and duration of at most three minutes. Upload `clearpath-demo.mp4` to YouTube or Vimeo, make it viewable by judges, and test the resulting link.
+
+5. **Complete Devpost.** Add the real repository, deployed app, and video links, plus `submission/thumbnail.png` and the gallery. Copy the project story from `submission/devpost.md`, leaving out its owner notes. Enter the actual registered participants and correct school/department details. Describe contributions accurately: Lev built the project with AI assistance. Confirm the two-department rule, AI policy, and any organizer-only challenge instructions before choosing prizes.
+
+6. **Submit.** Open each public link once more and check the Devpost preview. Lev clicks **Submit** before the 11 AM target, leaving the rest of the day as a buffer before the official 5 PM deadline. Confirm Devpost shows the entry as submitted.
+
+The app uses Gemma 4 `gemma-4-26b-a4b-it`; the narration uses a separate model. No applicant study or measured impact is claimed. The MIT license covers the application code, with model and service terms separate.
+
+The existing Devpost overview is saved as Clearpath, and Best Use of Gemma is selected. The story and technology tags are prefilled in the open project-details form; that step still needs the real video link before it can be saved. The team preview currently lists only Lev.

@@ -12,13 +12,11 @@ test("a slow file read preserves notes edited while import was pending", async (
       return original.call(this);
     };
   });
-  await page
-    .getByLabel("Import a text note")
-    .setInputFiles({
-      name: "new-note.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("New detail for my application"),
-    });
+  await page.getByLabel("Import a text note").setInputFiles({
+    name: "new-note.txt",
+    mimeType: "text/plain",
+    buffer: Buffer.from("New detail for my application"),
+  });
   await page.getByLabel("Text for My notes").fill("Full name: Updated Name");
   await expect(page.getByLabel("Text for new-note.txt")).toBeVisible();
   await expect(page.getByLabel("Text for My notes")).toHaveValue(

@@ -1,38 +1,35 @@
-# Clearpath demo — under 3 minutes
+# Demo narration and rehearsal
 
-Use fictional data throughout. The sample starts with an explicitly labeled authored illustration. Press “Draft from my notes” on camera to show actual Gemma inference. Never describe the initial sample drafts as a live generation. An edited video may shorten waiting time if it says so.
+The video records the actual app, one live Gemma call with its wait retained, and a fictional applicant. The opening drafts and breakdown are authored illustrations. Narration is synthetic: Orus, generated with Gemini 3.8 Flash TTS. It does not imitate a real person.
 
-## 0:00–0:20 — The problem
+## Scene 1: It sounds finished. What did it leave out?
 
-“A student needs a working laptop to keep up with class. The support application asks them to describe the unforeseen circumstances necessitating assistance. The opportunity is helpful. The form is hard to start.”
-Show the landing page and enter the sample.
+This answer sounds finished. It is not. A student explains why she needs help replacing a broken laptop. But the application asks for four things, and her paragraph answers two. Clearpath helps her find the missing parts and finish the answer herself.
 
-## 0:20–0:45 — Make the question understandable
+## Scene 2: One question, four parts · fictional example
 
-“Clearpath keeps the real question visible and offers a simpler guide: what happened, and how is it making college harder? Our demonstration uses Maya, a fictional student, and fictional notes.”
-Show the original question, plain-language guide, and source notes. Open My context briefly.
+Here is Maya’s application. She describes the expense and how it affects her coursework. What amount does she need? What other financial help has she tried? Neither detail is in her notes. The opening example is an illustration. Next, we will run the actual model.
 
-## 0:45–1:15 — Real Gemma inference
+## Scene 3: Live Gemma 4 inference · full wait shown
 
-“The sample begins with labeled example drafts. This button calls Gemma 4 with the actual questions and notes. It returns proposed answers and source excerpts. The app checks every excerpt against the input.”
-Click Draft from my notes. Show the real wait or label any shortened pause. Select the situation question after generation.
+Gemma four receives the original question and Maya’s rough notes. We are keeping the full wait in this recording. The server checks that suggested question parts quote the prompt, and that suggested details cite exact excerpts from her notes. Those checks establish where the text came from. Maya still checks what it means.
 
-## 1:15–1:40 — The important blank
+## Scene 4: Check the breakdown. Check the source.
 
-“Five answers have support. But Maya hasn't priced a replacement, so there is no requested amount. Clearpath asks her instead of making one up. We’ll add 450 dollars as a detail she has now confirmed for this demonstration.”
-Click the missing-question shortcut and type 450. This is demonstration data, not a price estimate or a funding recommendation.
+The model has proposed four parts. Maya compares them with the original question, then checks the two details supported by her notes. The excerpts are right beside each decision. If a suggestion misreads the question, she can remove it. If the wording is wrong, she can edit it.
 
-## 1:40–2:15 — Keep control
+## Scene 5: Two precise follow-ups. Two answers from Maya.
 
-“You can inspect the excerpt beside the draft, correct any wording, and save unfinished work locally. A matching quote is not a fact check. Before export, you review each completed answer.”
-Open Review & export. Confirm each answer visibly.
+Now the app asks for the missing amount and the other help she has tried. In this fictional example, Maya enters four hundred fifty dollars and says she has not tried other help yet. That answer comes from Maya. It was never inferred from silence. Clearpath joins only the details she confirmed.
 
-## 2:15–2:40 — Take the next step
+## Scene 6: Review the full answer before download
 
-“The result is a reviewed text packet that stays on your device. Nothing has been submitted. Underneath is a TypeScript domain layer for source checks and review state, a server-only Gemma integration, and automated browser tests.”
-Download the reviewed draft. Briefly show the not-submitted message.
+The draft now includes all four details. Maya reads the full answer, edits it if needed, and reviews the other fields. A changed answer requires a fresh review. Saving unfinished work is supported too, but restoring a file resets its confirmations. An old checkmark should never stand in for reading the current draft.
 
-## 2:40–2:55 — Honest scope
+## Scene 7: A reviewed draft, ready for the applicant’s next step
 
-“Clearpath currently accepts text forms and notes. It doesn't decide eligibility or verify facts. Our next step is testing the language with real applicants and support staff. The goal is simple: make a good opportunity easier to act on.”
-End on the workspace or landing page. Leave 5 seconds of buffer.
+Here is the downloaded packet: original questions, answers, and the parts Maya checked. It has not been submitted. Clearpath is a working text-form prototype, built with Gemma, TypeScript, and shared validation across the server and browser. It does not verify facts or eligibility. It helps an applicant see what the question asks, supply their own details, and leave with an answer they have reviewed.
+
+## Recording again
+
+Run the app on port 4173. Run `node scripts/generate-narration.mjs` to generate or reuse audio, then `node scripts/record-demo.mjs` to record. Both are explicit live-provider tools, separate from automated tests. The recorder checks that the live result fits this particular demonstration and stops if it does not. It never substitutes recorded output for a failed live call.

@@ -1,14 +1,28 @@
 # Clearpath
 
-**More possibility. Less paperwork.**
+A draft can read well and still miss part of the question.
 
-Clearpath turns application questions into a guided drafting workspace. Bring a text form and your own notes; see suggested answers beside exact source excerpts, fill missing facts yourself, then review before exporting.
+Clearpath breaks application questions into parts tied to the original wording. It brings in details from the applicant's notes and asks follow-ups for what is missing. The applicant checks the suggestions and reviews the final answer before downloading it.
 
-Built from scratch during Gator Hack V, October 24–25, 2026. No pre-event Tables n Tabs project code, data, or infrastructure is used.
+Built by Lev Bergen with Codex assistance during Gator Hack V, October 24–25, 2026. This is a fresh project; no Tables n Tabs code, data, or infrastructure is reused.
+
+## Try the workflow
+
+The fictional example asks Maya to explain an unexpected expense, its effect on coursework, the amount she needs, and other financial help she has tried. Her paragraph covers the first two. It sounds finished, but the question asks for more.
+
+1. Open the missing-details challenge, or paste your own text form with one question per line.
+2. Add notes directly or import `.txt`/`.md` files.
+3. Choose **Draft from my notes** to call Gemma 4. Check the proposed question parts against the original wording.
+4. Confirm or correct the suggested details, answer the follow-ups, and remove any part the question does not actually ask for.
+5. Build an answer from the details you confirmed, edit it if needed, then review every completed answer and download the text packet.
+
+The examples begin with labeled illustrations; the drafting button makes a real model call. Without AI, you can explore the illustration, enter answers, copy exact labeled details from notes, review, and export.
+
+**Save workspace** downloads unfinished work as a local JSON file. Resuming keeps your notes and answers but resets confirmations and reviews. The file contains your information; keep it private.
 
 ## Run locally
 
-Requires Node.js 22.12+ and npm. This build was verified with Node.js 26.
+Requires Node.js 22.12+ and npm. Development has been tested with Node.js 26.
 
 ```sh
 npm install
@@ -16,39 +30,25 @@ cp .env.example .env
 npm run dev
 ```
 
-Open http://127.0.0.1:4173. To enable AI, set `GEMINI_API_KEY` in `.env`; the current model is **`gemma-4-26b-a4b-it`**. Google accepted this model with the configured project and it has been exercised against the full example application. Restarting is automatic during development after `.env` changes. Keep the key server-only and out of Git.
+Open [the local app](http://127.0.0.1:4173). Set `GEMINI_API_KEY` in `.env` to enable **Gemma 4 `gemma-4-26b-a4b-it`** through Google's Gemini API. The key stays on the server and must stay out of Git. The development server watches `.env` for changes.
 
-You can use direct answers, exact label/value matching, review, save/resume, and export without a model. The sample starts with explicitly labeled authored illustrative drafts; pressing “Draft from my notes” performs a real model call. The UI distinguishes those states.
+An Ollama adapter is also available through `AI_PROVIDER=ollama` and `OLLAMA_MODEL`. Local Ollama inference has not been tested on the development machine.
 
-For local Ollama, install a model separately and set `AI_PROVIDER=ollama` and `OLLAMA_MODEL`. The adapter exists; local Ollama inference has not been exercised on the development machine.
+## How it works
 
-## Use it
+React, TypeScript, and Vite provide the interface; an Express server calls Gemma with minimal thinking. The model proposes drafts, simpler questions, and question parts. Zod schemas and domain functions check exact quotes against the notes and original questions.
 
-1. Explore the fictional student support application or paste a title and one question per line. Mark optional questions with `(optional)` and character limits with `(max 200 characters)`.
-2. Add notes directly or import `.txt`/`.md` notes. Original questions remain visible.
-3. Draft with the connected model, or copy exact labeled matches without AI.
-4. Inspect excerpts, answer unknowns, and edit the draft. Edits require another review.
-5. Review each completed answer, then download the text packet. Clearpath never submits an application.
+A matching quote establishes that the text is present. It does **not** establish that the answer is true, that the quote supports the claim, or that the breakdown found every requirement. The applicant checks all three.
 
-“Save workspace” downloads unfinished work as a local JSON file. “Resume a saved workspace” restores it without automatically trusting previous review states. Saved work contains your own notes and answers; keep that file private.
+Building an answer joins only the confirmed details. Export requires all required answers and a review of every completed answer. An answer with a breakdown needs its active checks resolved first. Editing an answer resets its review and question checks; changing the notes clears old drafts and checks. Late model responses cannot replace newer edits.
 
-## What is checked
+## Data and scope
 
-- Request validation: 1–30 fields, at most 5 notes, 16,000 characters per note and 32,000 total.
-- Each generated answer must cite exact text present in a submitted source. Unknown field/source IDs and duplicate proposals are rejected.
-- Numbers and email addresses must also occur in the cited excerpts.
-- Sources are checked again on workspace restore. All restored reviews reset.
-- Changing context clears drafts and reviews. In-flight results cannot overwrite a newer workspace or manually edited answer.
-- Export requires all required answers to pass field validation and every completed answer to have been reviewed.
-- Source presence is **not** fact checking, semantic entailment, or eligibility verification. A model can misinterpret a real excerpt. Human review remains essential.
+Clearpath has no application database, analytics, or automatic browser storage. Choosing AI drafting sends the form and notes to Google under the terms of the configured API project. Explicit downloads stay on your device. Read-aloud uses the speech engine configured by the browser or operating system.
 
-## Technical approach
+This prototype accepts text forms and notes. It does not parse PDFs/images, decide eligibility, verify facts, fill external websites, or submit applications. Check imported questions against the original form. Use fictional data for judging. No applicant study has been conducted.
 
-React + TypeScript + Vite on the client, a small Express server, Zod schemas shared across API and saved-workspace boundaries, pure domain modules, Vitest integration tests, and Playwright browser tests. Gemma 4 runs through Google's generateContent API with thinking disabled for the bounded drafting task. No arbitrary tool execution or external URL fetching is available to the model.
-
-No application database, analytics, automatic browser storage, or outgoing messages. Notes go to Google only when the user chooses AI drafting. Google processing is governed by the terms of the user's API project; Clearpath cannot promise that an external provider retains nothing. Fonts are self-hosted. Read-aloud uses the browser/OS speech engine; available voices and where synthesis occurs depend on the browser.
-
-## Verify
+## Verify and host
 
 ```sh
 npm test
@@ -57,23 +57,17 @@ npm run build
 npx playwright test
 ```
 
-The browser tests use installed Google Chrome and a separate local test server on port 4174 with AI disabled, so they never spend API quota. Live inference is checked separately with fictional data.
+Browser tests use Google Chrome and a separate server on port 4174 with AI disabled. They do not call a live model.
 
 ```sh
 npm run build
 npm start
 ```
 
-Production serves only `dist/` and the API. Set `HOST=0.0.0.0` on a hosting provider. `render.yaml` is prepared for a Render web service; publishing is a separate owner action.
+Production serves `dist/` and the API. `render.yaml` prepares a separate Render web service with `HOST=0.0.0.0`. The in-memory rate limit is intended for a single prototype instance. Publication and deployment remain the owner's actions.
 
-## Limits
-
-Text forms only: no PDF/image parsing, native site filling, accounts, funding discovery, eligibility decisions, or actual application submission. Imported field inference is deliberately simple; check the imported questions and requirements. The rate limiter is in-memory and intended for a single early-stage instance; add shared limits/authentication before scaling a public deployment. The hosted prototype should be used with fictional data during judging.
-
-## Submission materials
-
-See `submission/devpost.md`, `submission/demo-script.md`, and the prepared gallery. No public repository, deployment, team affiliation, or submission URL is claimed before the owner actually publishes it. See `docs/progress.md` for verified build state.
+Submission materials are in `submission/`; recorded checks are in `docs/progress.md` and `submission/readiness-evidence.md`. Public instructions informed the fictional challenge, with references in `src/core/challenge.ts`. It is not an official application or university partnership.
 
 ## License
 
-MIT for this application. Model weights and external services have their own licenses and terms. An open-source code license does not grant rights to the applicant's notes.
+MIT for the application code. Models and external services have their own terms. Applicant notes remain the applicant's information.

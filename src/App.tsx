@@ -23,6 +23,22 @@ import { Modal } from "./components/Modal";
 import { FieldEditor } from "./components/FieldEditor";
 import { EvidencePanel } from "./components/EvidencePanel";
 import { ContextEditor } from "./components/ContextEditor";
+import { CoveragePanel } from "./components/CoveragePanel";
+import {
+  challengeApplication,
+  challengeSources,
+  challengeIllustration,
+  challengeCoverage,
+} from "./core/challenge";
+import {
+  validateCoverage,
+  coverageReady,
+  coverageStarted,
+  assembleCoverage,
+  invalidateCoverage,
+  type Coverage,
+  type FieldCoverage,
+} from "./core/coverage";
 import {
   sampleApplication,
   sampleIllustration,
@@ -43,6 +59,7 @@ import type {
   DraftResult,
   Engine,
   Source,
+  Field,
 } from "./core/types";
 import "./styles.css";
 
@@ -53,6 +70,7 @@ export default function App() {
   const [application, setApplication] = useState<Application | null>(null);
   const [sources, setSources] = useState<Source[]>([]);
   const [answers, setAnswers] = useState<Answers>({});
+  const [coverage, setCoverage] = useState<Coverage>({});
   const [selected, setSelected] = useState(0);
   const [stage, setStage] = useState<Stage>("draft");
   const [modal, setModal] = useState<ModalName>(null);
@@ -100,7 +118,12 @@ export default function App() {
     controller.current?.abort();
     setBusy(false);
   }
-  function start(app: Application, context: Source[], sample = false) {
+  function start(
+    app: Application,
+    context: Source[],
+    sample = false,
+    challenge = false,
+  ) {
     cancelDraft();
     setApplication(app);
     setSources(context);
@@ -110,8 +133,15 @@ export default function App() {
     setError("");
     setReviewing(false);
     setIllustration(sample);
+    setCoverage(
+      challenge ? validateCoverage(app, context, challengeCoverage) : {},
+    );
     if (sample) {
-      const result = validateSuggestions(app, context, sampleIllustration);
+      const result = validateSuggestions(
+        app,
+        context,
+        challenge ? challengeIllustration : sampleIllustration,
+      );
       setAnswers(
         Object.fromEntries(
           Object.entries(result.answers).map(([key, value]) => [
@@ -131,6 +161,7 @@ export default function App() {
     if (!application) return;
     cancelDraft();
     const field = application.fields[selected];
+    setCoverage((previous) => invalidateCoverage(field.id, previous));
     setAnswers((previous) => ({
       ...previous,
       [field.id]: editAnswer(
@@ -144,6 +175,60 @@ export default function App() {
         value,
       ),
     }));
+  }
+  function changeCoverage(
+    fieldId: string,
+    update: (state: FieldCoverage) => FieldCoverage,
+  ) {
+    cancelDraft();
+    setCoverage((previous) =>
+      Object.hasOwn(previous, fieldId)
+        ? { ...previous, [fieldId]: update(previous[fieldId]) }
+        : previous,
+    );
+    setAnswers((previous) =>
+      previous[fieldId]
+        ? { ...previous, [fieldId]: { ...previous[fieldId], reviewed: false } }
+        : previous,
+    );
+  }
+  function buildFromDetails(fieldId: string) {
+    if (!application) return;
+    const target = application.fields.find((f) => f.id === fieldId);
+    if (!target) return;
+    try {
+      const value = assembleCoverage(fieldId, coverage);
+      const error = fieldError(target, value);
+      if (error) {
+        setError(
+          `Your confirmed details need editing before they fit this answer. ${error}`,
+        );
+        return;
+      }
+      cancelDraft();
+      setAnswers((previous) => ({
+        ...previous,
+        [fieldId]: {
+          fieldId,
+          value,
+          evidence: [],
+          reviewed: false,
+          origin: "person",
+        },
+      }));
+      setCoverage((previous) => ({
+        ...previous,
+        [fieldId]: { ...previous[fieldId], assembled: true },
+      }));
+      setError("");
+      setMessage(
+        "Built only from the details you confirmed. Now review the whole answer against the original question.",
+      );
+    } catch {
+      setError(
+        "Check the question breakdown and confirm each active detail first.",
+      );
+    }
   }
   async function draft() {
     if (!application) return;
@@ -184,6 +269,28 @@ export default function App() {
         ),
       }));
       setEngine(result.engine);
+      setCoverage((previous) => {
+        const next = { ...(result.coverage ?? previous) };
+        for (const [id, state] of Object.entries(previous)) {
+          if (
+            state.confirmed ||
+            state.parts.some(
+              (part) => part.origin === "person" || part.dismissed,
+            ) ||
+            answers[id]?.origin === "person" ||
+            !Object.hasOwn(next, id)
+          )
+            next[id] = {
+              ...state,
+              assembled:
+                state.assembled &&
+                ((answers[id]?.origin === "person" &&
+                  Boolean(answers[id]?.value.trim())) ||
+                  answers[id]?.value === result.answers[id]?.value),
+            };
+        }
+        return next;
+      });
       setIllustration(false);
       setReviewing(false);
       if (result.guides)
@@ -198,7 +305,13 @@ export default function App() {
               }
             : previous,
         );
-      const first = application.fields.findIndex((f) => result.answers[f.id]);
+      const coverageIndex = application.fields.findIndex(
+        (f) => result.coverage?.[f.id],
+      );
+      const first =
+        coverageIndex >= 0
+          ? coverageIndex
+          : application.fields.findIndex((f) => result.answers[f.id]);
       if (first >= 0) select(first);
       setMessage(
         `${count} ${count === 1 ? "draft" : "drafts"} prepared${result.engine.provider === "exact" ? " from exact labeled matches" : ` with ${result.engine.model}`}. ${result.rejected.length ? `${result.rejected.length} unsupported drafts left out. ` : ""}Review each answer before you use it.`,
@@ -214,7 +327,12 @@ export default function App() {
     if (!application) return;
     const field = application.fields[selected];
     const current = answers[field.id];
-    if (!current || fieldError(field, current.value)) return;
+    if (
+      !current ||
+      fieldError(field, current.value) ||
+      !coverageReady(field.id, coverage)
+    )
+      return;
     const next = { ...answers, [field.id]: { ...current, reviewed: true } };
     setAnswers(next);
     const index = application.fields.findIndex(
@@ -228,6 +346,16 @@ export default function App() {
   }
   function beginReview() {
     if (!application) return;
+    const gap = application.fields.findIndex(needsCoverageAttention);
+    if (gap >= 0) {
+      select(gap, true);
+      setStage("guide");
+      setReviewing(false);
+      setMessage(
+        "Check this question’s parts and confirm the details before the final review.",
+      );
+      return;
+    }
     const index = application.fields.findIndex(
       (f) => answers[f.id]?.value.trim() && !answers[f.id].reviewed,
     );
@@ -236,9 +364,37 @@ export default function App() {
       setReviewing(true);
     } else setMessage("Every completed answer has already been reviewed.");
   }
+  function needsCoverageAttention(target: Field) {
+    const hasAnswer = Boolean(answers[target.id]?.value.trim());
+    const started = coverageStarted(target.id, coverage);
+    return (
+      (target.required || hasAnswer || started) &&
+      (!coverageReady(target.id, coverage) || (started && !hasAnswer))
+    );
+  }
+  function skipOptionalQuestion(fieldId: string) {
+    if (!application?.fields.some((f) => f.id === fieldId && !f.required))
+      return;
+    cancelDraft();
+    setAnswers((previous) => {
+      const next = { ...previous };
+      delete next[fieldId];
+      return next;
+    });
+    setCoverage((previous) => {
+      const next = { ...previous };
+      delete next[fieldId];
+      return next;
+    });
+    setReviewing(false);
+    setError("");
+    setMessage(
+      "Optional question skipped. Its answer and follow-up details were cleared.",
+    );
+  }
   function download() {
-    if (!application || !canExport(application, answers)) return;
-    const blob = new Blob([exportPacket(application, answers)], {
+    if (!application || !canExport(application, answers, coverage)) return;
+    const blob = new Blob([exportPacket(application, answers, coverage)], {
       type: "text/plain;charset=utf-8",
     });
     const url = URL.createObjectURL(blob);
@@ -258,7 +414,16 @@ export default function App() {
   }
   function saveWorkspace() {
     if (!application) return;
-    const blob = new Blob([serializeWorkspace(application, sources, answers)], {
+    let content: string;
+    try {
+      content = serializeWorkspace(application, sources, answers, coverage);
+    } catch {
+      setError(
+        "This workspace could not be saved. Check the answer and note length limits, then try again. Your work is still in this tab.",
+      );
+      return;
+    }
+    const blob = new Blob([content], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
@@ -280,6 +445,7 @@ export default function App() {
       if (revision !== requestRevision.current) return;
       start(restored.application, restored.sources);
       setAnswers(restored.answers);
+      setCoverage(restored.coverage);
       setIllustration(
         Object.values(restored.answers).some((a) => a.origin === "example"),
       );
@@ -314,13 +480,19 @@ export default function App() {
   const field = application?.fields[selected];
   const required = application?.fields.filter((f) => f.required) ?? [];
   const ready = required.filter(
-    (f) => !fieldError(f, answers[f.id]?.value || ""),
+    (f) =>
+      !fieldError(f, answers[f.id]?.value || "") &&
+      coverageReady(f.id, coverage),
   ).length;
   const missing = required.length - ready;
   const completed =
     application?.fields.filter((f) => answers[f.id]?.value.trim()) ?? [];
   const reviewed = completed.filter((f) => answers[f.id]?.reviewed).length;
-  const exportReady = application ? canExport(application, answers) : false;
+  const exportReady = application
+    ? canExport(application, answers, coverage)
+    : false;
+  const coverageGaps =
+    application?.fields.filter(needsCoverageAttention).length ?? 0;
 
   return (
     <>
@@ -399,6 +571,14 @@ export default function App() {
         />
         {!application ? (
           <Landing
+            onChallenge={() =>
+              start(
+                challengeApplication,
+                structuredClone(challengeSources),
+                true,
+                true,
+              )
+            }
             onSample={() =>
               start(sampleApplication, structuredClone(sampleSources), true)
             }
@@ -507,7 +687,8 @@ export default function App() {
                     className="button primary"
                     onClick={beginReview}
                     disabled={
-                      completed.length === 0 || reviewed === completed.length
+                      coverageGaps === 0 &&
+                      (completed.length === 0 || reviewed === completed.length)
                     }
                   >
                     <CheckCircle2 size={17} /> Review every answer
@@ -532,19 +713,23 @@ export default function App() {
                         <strong>{f.label}</strong>
                         <p>
                           {answers[f.id]?.value ||
-                            (f.required
-                              ? "Still needs your answer"
-                              : "Optional · left blank")}
+                            (needsCoverageAttention(f)
+                              ? "Follow-up details need your attention"
+                              : f.required
+                                ? "Still needs your answer"
+                                : "Optional · left blank")}
                         </p>
                       </div>
                       <span className="review-row-status">
-                        {answers[f.id]?.reviewed
-                          ? "Reviewed"
-                          : answers[f.id]?.value
-                            ? "To review"
-                            : f.required
-                              ? "Missing"
-                              : "Optional"}
+                        {needsCoverageAttention(f)
+                          ? "Check details"
+                          : answers[f.id]?.reviewed
+                            ? "Reviewed"
+                            : answers[f.id]?.value
+                              ? "To review"
+                              : f.required
+                                ? "Missing"
+                                : "Optional"}
                       </span>
                       <ChevronRight size={17} />
                     </button>
@@ -569,10 +754,10 @@ export default function App() {
                   <span>
                     {reviewing
                       ? "Reviewing your answers"
-                      : "Go at your own pace."}
+                      : "Review the original question beside each answer."}
                   </span>
                 </div>
-                {missing > 0 && !reviewing && (
+                {(missing > 0 || coverageGaps > 0) && !reviewing && (
                   <div className="missing-banner">
                     <div>
                       <span className="missing-icon">
@@ -580,33 +765,45 @@ export default function App() {
                       </span>
                       <div>
                         <strong>
-                          {missing === 1
-                            ? "One detail still needs you"
-                            : `${missing} details still need you`}
+                          {coverageGaps
+                            ? "A paragraph can look finished and still miss the question"
+                            : missing === 1
+                              ? "One detail still needs you"
+                              : `${missing} details still need you`}
                         </strong>
                         <p>
-                          {missing === 1
-                            ? "Clearpath left it open. A missing fact deserves a question, not a guess."
-                            : "Bring what you know. We’ll leave room for the details only you can add."}
+                          {coverageGaps
+                            ? "Check the suggested parts against the original, then fill the details only you can provide."
+                            : missing === 1
+                              ? "This required answer is still blank. Add the detail when you know it."
+                              : "Answer the remaining required questions before exporting."}
                         </p>
                       </div>
                     </div>
                     <button
                       className="text-button"
                       onClick={() => {
-                        const next = application.fields.findIndex(
-                          (f) =>
-                            f.required &&
-                            fieldError(f, answers[f.id]?.value || ""),
-                        );
+                        const next = coverageGaps
+                          ? application.fields.findIndex(needsCoverageAttention)
+                          : application.fields.findIndex(
+                              (f) =>
+                                f.required &&
+                                fieldError(f, answers[f.id]?.value || ""),
+                            );
                         setStage("guide");
                         select(next, true);
                       }}
                     >
-                      Answer{" "}
-                      {missing === 1
-                        ? "the missing question"
-                        : "a missing question"}{" "}
+                      {coverageGaps ? (
+                        "Check the missing details"
+                      ) : (
+                        <>
+                          Answer{" "}
+                          {missing === 1
+                            ? "the missing question"
+                            : "a missing question"}
+                        </>
+                      )}{" "}
                       <ArrowRight size={16} />
                     </button>
                   </div>
@@ -659,29 +856,112 @@ export default function App() {
                       tabIndex={-1}
                       className="field-focus"
                     >
-                      {field && (
-                        <FieldEditor
-                          field={field}
-                          answer={answers[field.id]}
-                          position={selected}
-                          total={application.fields.length}
-                          onEdit={updateAnswer}
-                          onPrevious={() =>
-                            select(Math.max(0, selected - 1), true)
+                      {field &&
+                      coverage[field.id] &&
+                      (!coverageReady(field.id, coverage) ||
+                        needsCoverageAttention(field)) ? (
+                        <CoveragePanel
+                          key={field.id}
+                          question={field.label}
+                          currentAnswer={answers[field.id]?.value || ""}
+                          state={coverage[field.id]}
+                          onConfirm={() =>
+                            changeCoverage(field.id, (state) => ({
+                              ...state,
+                              confirmed: true,
+                            }))
                           }
-                          onNext={() =>
-                            select(
-                              Math.min(
-                                application.fields.length - 1,
-                                selected + 1,
+                          onEdit={(id, value) =>
+                            changeCoverage(field.id, (state) => ({
+                              ...state,
+                              assembled: false,
+                              parts: state.parts.map((p) =>
+                                p.id === id
+                                  ? {
+                                      ...p,
+                                      value,
+                                      accepted: false,
+                                      evidence: [],
+                                      origin: "person",
+                                    }
+                                  : p,
                               ),
-                              true,
-                            )
+                            }))
                           }
-                          onSpeak={speak}
-                          reviewing={reviewing}
-                          onApprove={approve}
+                          onAccept={(id) =>
+                            changeCoverage(field.id, (state) => ({
+                              ...state,
+                              parts: state.parts.map((p) =>
+                                p.id === id
+                                  ? { ...p, accepted: Boolean(p.value.trim()) }
+                                  : p,
+                              ),
+                            }))
+                          }
+                          onDismiss={(id) =>
+                            changeCoverage(field.id, (state) => ({
+                              ...state,
+                              assembled: false,
+                              parts: state.parts.map((p) =>
+                                p.id === id
+                                  ? {
+                                      ...p,
+                                      dismissed: !p.dismissed,
+                                      accepted: false,
+                                    }
+                                  : p,
+                              ),
+                            }))
+                          }
+                          onBuild={() => buildFromDetails(field.id)}
+                          onUseCurrent={() =>
+                            changeCoverage(field.id, (state) => ({
+                              ...state,
+                              assembled: true,
+                            }))
+                          }
+                          onRemove={() => {
+                            cancelDraft();
+                            setCoverage((previous) => {
+                              const next = { ...previous };
+                              delete next[field.id];
+                              return next;
+                            });
+                            setMessage(
+                              "You removed this suggested breakdown. Check the original question directly before reviewing your answer.",
+                            );
+                          }}
+                          onSkip={
+                            field.required
+                              ? undefined
+                              : () => skipOptionalQuestion(field.id)
+                          }
                         />
+                      ) : (
+                        field && (
+                          <FieldEditor
+                            field={field}
+                            answer={answers[field.id]}
+                            position={selected}
+                            total={application.fields.length}
+                            onEdit={updateAnswer}
+                            onPrevious={() =>
+                              select(Math.max(0, selected - 1), true)
+                            }
+                            onNext={() =>
+                              select(
+                                Math.min(
+                                  application.fields.length - 1,
+                                  selected + 1,
+                                ),
+                                true,
+                              )
+                            }
+                            onSpeak={speak}
+                            reviewing={reviewing}
+                            onApprove={approve}
+                          />
+                        )
                       )}
                     </div>
                     {reviewing && (
@@ -787,7 +1067,9 @@ export default function App() {
             </p>
           )}
           <div className="modal-footer">
-            <span className="muted">A fresh start, at your pace.</span>
+            <span className="muted">
+              Check the imported questions before drafting.
+            </span>
             <button
               className="button primary"
               onClick={() => {
@@ -821,6 +1103,7 @@ export default function App() {
               cancelDraft();
               setSources(next);
               setAnswers({});
+              setCoverage({});
               setIllustration(false);
               setReviewing(false);
               setStage("draft");
@@ -890,10 +1173,7 @@ export default function App() {
         </Modal>
       )}
       {modal === "about" && (
-        <Modal
-          title="A clear path through the form."
-          onClose={() => setModal(null)}
-        >
+        <Modal title="How Clearpath works" onClose={() => setModal(null)}>
           <div className="how-steps">
             {[
               [
@@ -901,7 +1181,7 @@ export default function App() {
                 "Paste a form, or explore our fictional student support application. The original questions stay visible.",
               ],
               [
-                "Bring your story.",
+                "Add your notes.",
                 "Add your notes. A connected model can suggest answers with exact excerpts. Without AI, only explicit label/value matches are copied.",
               ],
               [
@@ -946,6 +1226,7 @@ export default function App() {
                 setApplication(null);
                 setAnswers({});
                 setSources([]);
+                setCoverage({});
                 setModal(null);
                 setMessage("");
                 setError("");

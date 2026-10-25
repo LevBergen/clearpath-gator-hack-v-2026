@@ -3,6 +3,7 @@ import { z } from "zod";
 import type { Engine, Application, Source } from "../src/core/types";
 import { exactMatches, validateSuggestions } from "../src/core/evidence";
 import { applicationSchema, sourcesSchema } from "../src/core/schema";
+import { validateCoverage } from "../src/core/coverage";
 export type AppOptions = {
   engine: Engine;
   generate?: (application: Application, sources: Source[]) => Promise<unknown>;
@@ -40,12 +41,10 @@ export function createApp(options: AppOptions) {
     }
     const body = requestSchema.safeParse(req.body);
     if (!body.success) {
-      res
-        .status(400)
-        .json({
-          error:
-            "Check your form and notes. Use 1–30 questions and up to 32,000 characters of notes.",
-        });
+      res.status(400).json({
+        error:
+          "Check your form and notes. Use 1–30 questions and up to 32,000 characters of notes.",
+      });
       return;
     }
     const now = Date.now();
@@ -72,17 +71,28 @@ export function createApp(options: AppOptions) {
       }
       if (!options.generate) throw new Error("Provider not configured");
       const raw = await options.generate(application, sources);
+      const proposedCoverage =
+        raw && typeof raw === "object" && "coverage" in raw
+          ? (raw as { coverage: unknown }).coverage
+          : undefined;
       res.json({
         ...validateSuggestions(application, sources, raw),
+        ...(proposedCoverage !== undefined
+          ? {
+              coverage: validateCoverage(
+                application,
+                sources,
+                proposedCoverage,
+              ),
+            }
+          : {}),
         engine: options.engine,
       });
     } catch {
-      res
-        .status(502)
-        .json({
-          error:
-            "The model could not produce a usable draft. Your notes are still here. Try again, check the model connection, or answer the questions yourself.",
-        });
+      res.status(502).json({
+        error:
+          "The model could not produce a usable draft. Your notes are still here. Try again, check the model connection, or answer the questions yourself.",
+      });
     }
   });
   app.use("/api", (_req, res) =>
@@ -96,11 +106,9 @@ export function createApp(options: AppOptions) {
       next: express.NextFunction,
     ) => {
       if (error.type === "entity.too.large") {
-        res
-          .status(413)
-          .json({
-            error: "This request is too large. Shorten the form or notes.",
-          });
+        res.status(413).json({
+          error: "This request is too large. Shorten the form or notes.",
+        });
         return;
       }
       if (error instanceof SyntaxError) {

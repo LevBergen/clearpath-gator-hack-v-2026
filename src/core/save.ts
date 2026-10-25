@@ -2,6 +2,11 @@ import type { Application, Source, Answers } from "./types";
 import { z } from "zod";
 import { applicationSchema, safeId, sourcesSchema } from "./schema";
 import { validateSuggestions } from "./evidence";
+import {
+  coverageStateSchema,
+  restoreCoverage,
+  type Coverage,
+} from "./coverage";
 
 const savedAnswer = z.object({
   fieldId: safeId,
@@ -20,33 +25,42 @@ const savedAnswer = z.object({
     .max(10),
 });
 const savedSchema = z.object({
-  version: z.literal(1),
+  version: z.union([z.literal(1), z.literal(2)]),
   application: applicationSchema,
   sources: sourcesSchema,
   answers: z.record(safeId, savedAnswer),
+  coverage: coverageStateSchema.optional().default({}),
 });
 
 export function serializeWorkspace(
   application: Application,
   sources: Source[],
   answers: Answers,
+  coverage: Coverage = {},
 ): string {
-  return JSON.stringify(
-    savedSchema.parse({ version: 1, application, sources, answers }),
+  const text = JSON.stringify(
+    savedSchema.parse({ version: 2, application, sources, answers, coverage }),
     null,
     2,
   );
+  if (text.length > 1000000)
+    throw new Error(
+      "This workspace is too large to save. Shorten the notes or answer details.",
+    );
+  return text;
 }
 
 export function restoreWorkspace(text: string): {
   application: Application;
   sources: Source[];
   answers: Answers;
+  coverage: Coverage;
 } {
   if (text.length > 1000000) throw new Error("This workspace is too large.");
   const saved = savedSchema.parse(JSON.parse(text));
   const answers: Answers = {};
   for (const field of saved.application.fields) {
+    if (!Object.hasOwn(saved.answers, field.id)) continue;
     const previous = saved.answers[field.id];
     if (!previous) continue;
     if (previous.origin === "person")
@@ -68,5 +82,10 @@ export function restoreWorkspace(text: string): {
         };
     }
   }
-  return { application: saved.application, sources: saved.sources, answers };
+  return {
+    application: saved.application,
+    sources: saved.sources,
+    answers,
+    coverage: restoreCoverage(saved.application, saved.sources, saved.coverage),
+  };
 }

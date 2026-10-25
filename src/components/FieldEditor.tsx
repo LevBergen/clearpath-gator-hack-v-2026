@@ -35,7 +35,7 @@ export function FieldEditor({
     "aria-label": `Answer: ${field.label}`,
     "aria-describedby": `hint-${field.id}`,
     "aria-invalid": Boolean(error),
-    maxLength: 6001,
+    maxLength: 6000,
   };
   return (
     <article className="editor-card">
@@ -96,12 +96,12 @@ export function FieldEditor({
         <span>
           {error ||
             (answer?.origin === "ai"
-              ? "AI draft · check the source and make it yours."
+              ? "AI draft · check the source and the wording."
               : answer?.origin === "example"
-                ? "Illustrative draft · check the source and make it yours."
+                ? "Illustrative draft · check the source and the wording."
                 : answer?.origin === "exact"
                   ? "Copied from an explicitly labeled detail in your notes."
-                  : "Your words are enough. Only include details you know are accurate.")}
+                  : "Only include details you know are accurate.")}
         </span>
         {field.maxLength && (
           <span className={value.length > field.maxLength ? "error-text" : ""}>

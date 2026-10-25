@@ -31,6 +31,7 @@ export type DraftResult = {
   answers: Answers;
   rejected: { fieldId: string; reason: string }[];
   guides?: Record<string, string>;
+  coverage?: import("./coverage").Coverage;
 };
 export type Engine = {
   provider: "google" | "ollama" | "exact";

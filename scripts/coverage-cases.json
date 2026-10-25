@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "fictional": true,
+  "purpose": "Predeclared six-case evaluation of returned question spans and missing-detail blanks. These are original synthetic questions and notes, not real application materials.",
+  "mappingRule": "A returned coverage part maps to an expected ask only when its promptQuote contains the entire declared promptSpan as a case-sensitive literal substring. No paraphrase or semantic matching is performed. A returned part can map to multiple asks; such merges are reported separately.",
+  "detailRule": "For a mapped known ask, count whether any returned mapped part has a nonempty proposed value; this does not check correctness. For a mapped missing ask, require every mapped value to be empty. Omitted or unmapped missing asks are unassessed, never passes. A nonempty part spanning both known and missing asks is flagged without claiming which fact the value asserts.",
+  "cases": [
+    {
+      "id": "equipment-request",
+      "workflow": "Equipment request",
+      "question": "Describe the equipment you need, what you will use it for, when you need to collect it, and when you can return it.",
+      "notes": "I need a portable projector. I will use it to display a campus map during our fictional club orientation. The collection time has not been decided. The return time is not recorded.",
+      "expected": [
+        { "id": "equipment", "promptSpan": "the equipment you need", "state": "known", "notesQuote": "I need a portable projector." },
+        { "id": "purpose", "promptSpan": "what you will use it for", "state": "known", "notesQuote": "I will use it to display a campus map during our fictional club orientation." },
+        { "id": "collection", "promptSpan": "when you need to collect it", "state": "missing", "notesQuote": null },
+        { "id": "return", "promptSpan": "when you can return it", "state": "missing", "notesQuote": null }
+      ]
+    },
+    {
+      "id": "volunteer-availability",
+      "workflow": "Volunteer availability",
+      "question": "Tell us which shifts you can cover, the tasks you are comfortable doing, whether you can lift supply boxes, and your transport plan.",
+      "notes": "I can cover Saturday morning and Sunday afternoon. I am comfortable greeting visitors and checking names on a signup list. My notes contain no information about lifting limits or how I will travel to the venue.",
+      "expected": [
+        { "id": "shifts", "promptSpan": "which shifts you can cover", "state": "known", "notesQuote": "I can cover Saturday morning and Sunday afternoon." },
+        { "id": "tasks", "promptSpan": "the tasks you are comfortable doing", "state": "known", "notesQuote": "I am comfortable greeting visitors and checking names on a signup list." },
+        { "id": "lifting", "promptSpan": "whether you can lift supply boxes", "state": "missing", "notesQuote": null },
+        { "id": "transport", "promptSpan": "your transport plan", "state": "missing", "notesQuote": null }
+      ]
+    },
+    {
+      "id": "internship-project",
+      "workflow": "Internship project",
+      "question": "Describe one project you contributed to, your own contribution, a measurable result, and what you would change next time.",
+      "notes": "For a class, I helped build a library-room occupancy display. My contribution was writing the CSV import routine and documenting its columns. We did not record usage or time savings. I have not decided what I would change next time.",
+      "expected": [
+        { "id": "project", "promptSpan": "one project you contributed to", "state": "known", "notesQuote": "For a class, I helped build a library-room occupancy display." },
+        { "id": "contribution", "promptSpan": "your own contribution", "state": "known", "notesQuote": "My contribution was writing the CSV import routine and documenting its columns." },
+        { "id": "result", "promptSpan": "a measurable result", "state": "missing", "notesQuote": null },
+        { "id": "change", "promptSpan": "what you would change next time", "state": "missing", "notesQuote": null }
+      ]
+    },
+    {
+      "id": "maintenance-request",
+      "workflow": "Maintenance request",
+      "question": "Explain what needs repair, where it is located, when someone can enter, and whether anyone has already tried a repair.",
+      "notes": "The wall-mounted shelf is loose in our fictional shared workshop. It is beside the north window. I do not know when the room can be opened for a repair visit. I have no record of previous repair attempts.",
+      "expected": [
+        { "id": "repair", "promptSpan": "what needs repair", "state": "known", "notesQuote": "The wall-mounted shelf is loose in our fictional shared workshop." },
+        { "id": "location", "promptSpan": "where it is located", "state": "known", "notesQuote": "It is beside the north window." },
+        { "id": "entry", "promptSpan": "when someone can enter", "state": "missing", "notesQuote": null },
+        { "id": "previous-repair", "promptSpan": "whether anyone has already tried a repair", "state": "missing", "notesQuote": null }
+      ]
+    },
+    {
+      "id": "community-event-request",
+      "workflow": "Community event request",
+      "question": "Describe the activity you want to run, the intended audience, your expected attendance, and your requested date.",
+      "notes": "Our fictional neighborhood group would like to run a seed-swap afternoon. The intended audience is residents who are beginning home gardeners. We have not estimated attendance or chosen a date.",
+      "expected": [
+        { "id": "activity", "promptSpan": "the activity you want to run", "state": "known", "notesQuote": "Our fictional neighborhood group would like to run a seed-swap afternoon." },
+        { "id": "audience", "promptSpan": "the intended audience", "state": "known", "notesQuote": "The intended audience is residents who are beginning home gardeners." },
+        { "id": "attendance", "promptSpan": "your expected attendance", "state": "missing", "notesQuote": null },
+        { "id": "date", "promptSpan": "your requested date", "state": "missing", "notesQuote": null }
+      ]
+    },
+    {
+      "id": "student-support",
+      "workflow": "Student support",
+      "question": "Describe the difficulty you are experiencing, how it affects your coursework, the specific support you are requesting, and other help you have already tried.",
+      "notes": "The desk lamp in my shared study area stopped working. I can no longer read printed diagrams there during evening coursework. I have not chosen what support to request. I have not written down whether I tried any other help.",
+      "expected": [
+        { "id": "difficulty", "promptSpan": "the difficulty you are experiencing", "state": "known", "notesQuote": "The desk lamp in my shared study area stopped working." },
+        { "id": "impact", "promptSpan": "how it affects your coursework", "state": "known", "notesQuote": "I can no longer read printed diagrams there during evening coursework." },
+        { "id": "support", "promptSpan": "the specific support you are requesting", "state": "missing", "notesQuote": null },
+        { "id": "other-help", "promptSpan": "other help you have already tried", "state": "missing", "notesQuote": null }
+      ]
+    }
+  ]
+}

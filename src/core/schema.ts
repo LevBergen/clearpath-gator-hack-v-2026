@@ -3,7 +3,7 @@ export const safeId = z
   .string()
   .regex(/^[a-zA-Z][a-zA-Z0-9_-]{0,79}$/)
   .refine(
-    (value) => !["constructor", "prototype", "__proto__"].includes(value),
+    (value) => value !== "prototype" && !Object.hasOwn(Object.prototype, value),
   );
 export const fieldSchema = z.object({
   id: safeId,

@@ -1,34 +1,28 @@
-import type { Application, Answers, Answer, Field } from "./types";
+import type { Application, Answers, Answer } from "./types";
+import { coverageReady, coverageStarted, type Coverage } from "./coverage";
 
-export function fieldError(field: Field, value: string): string | null {
-  if (!value.trim())
-    return field.required ? "This question still needs your answer." : null;
-  if (field.maxLength && value.length > field.maxLength)
-    return `Use ${field.maxLength} characters or fewer.`;
-  if (value.length > 6000) return "Use 6,000 characters or fewer.";
-  if (
-    field.kind === "email" &&
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
-  )
-    return "Enter a complete email address.";
-  if (
-    field.kind === "number" &&
-    (!/^\d+(?:\.\d{1,2})?$/.test(value.trim()) ||
-      !Number.isFinite(Number(value)) ||
-      Number(value) < 0)
-  )
-    return "Enter a nonnegative amount, with up to two decimal places.";
-  return null;
-}
+export { fieldError } from "./field-validation";
+import { fieldError } from "./field-validation";
 
-export function canExport(application: Application, answers: Answers): boolean {
+export function canExport(
+  application: Application,
+  answers: Answers,
+  coverage: Coverage = {},
+): boolean {
   return (
     application.fields.length > 0 &&
     application.fields.every((field) => {
-      const value = answers[field.id]?.value ?? "";
+      const answer = Object.hasOwn(answers, field.id)
+        ? answers[field.id]
+        : undefined;
+      const value = answer?.value ?? "";
+      const started = coverageStarted(field.id, coverage);
       return (
         !fieldError(field, value) &&
-        (!value.trim() || answers[field.id]?.reviewed === true)
+        (!started || Boolean(value.trim())) &&
+        ((!field.required && !value.trim() && !started) ||
+          coverageReady(field.id, coverage)) &&
+        (!value.trim() || answer?.reviewed === true)
       );
     })
   );
@@ -37,8 +31,9 @@ export function canExport(application: Application, answers: Answers): boolean {
 export function exportPacket(
   application: Application,
   answers: Answers,
+  coverage: Coverage = {},
 ): string {
-  if (!canExport(application, answers))
+  if (!canExport(application, answers, coverage))
     throw new Error(
       "Answer the required questions and review every completed answer before exporting.",
     );
@@ -47,13 +42,24 @@ export function exportPacket(
     "Prepared with Clearpath · Not submitted",
     "Review this draft against the original application before you use it. Source excerpts show where wording came from; they do not verify truth or eligibility.",
     ...application.fields.map((field) => {
-      const answer = answers[field.id];
+      const answer = Object.hasOwn(answers, field.id)
+        ? answers[field.id]
+        : undefined;
       if (!answer?.value.trim())
         return `${field.label}\nNot provided (optional)`;
       const provenance = answer.evidence
         .map((e) => `Source ${e.sourceId}: “${e.quote}”`)
         .join("\n");
-      return `${field.label}\n${answer.value}\n${provenance || "Entered by applicant."}`;
+      const parts = Object.hasOwn(coverage, field.id)
+        ? "\nQuestion parts checked by applicant:\n" +
+          coverage[field.id].parts
+            .map(
+              (part) =>
+                `- ${part.label}: ${part.dismissed ? "Removed as not asked by applicant" : part.value}`,
+            )
+            .join("\n")
+        : "";
+      return `${field.label}\n${answer.value}\n${provenance || "Entered by applicant."}${parts}`;
     }),
   ].join("\n\n");
 }

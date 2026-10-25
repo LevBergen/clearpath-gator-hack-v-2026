@@ -1,0 +1,1808 @@
+{
+  "fictional": true,
+  "developmentSet": true,
+  "observations": [
+    {
+      "stage": "initial development run",
+      "runId": "2026-10-25T07-36-50Z",
+      "fixtureSha256": "7b901f8a702b85081e2eb6d4cd3464d5ff583ef8a65284ca9e622a729daaa25c",
+      "totals": {
+        "callsAttempted": 6,
+        "http200": 6,
+        "liveResponses": 6,
+        "declaredAsks": 24,
+        "mappedAsks": 24,
+        "omittedOrUnmappedAsks": 0,
+        "knownAsks": 12,
+        "knownProposalsPresent": 12,
+        "missingAsks": 12,
+        "missingAsksMappedBlank": 10,
+        "missingAsksMappedNonblank": 2,
+        "missingAsksUnassessed": 0,
+        "returnedParts": 24,
+        "unmappedReturnedParts": 0,
+        "mergedReturnedParts": 0,
+        "literalPromptMatches": 24,
+        "nonblankProposals": 20,
+        "exactExcerptChecksPassed": 20,
+        "invalidExcerptChecks": 0,
+        "unexpectedCoverageFields": 0,
+        "rejectedAnswers": 0
+      },
+      "results": [
+        {
+          "caseId": "equipment-request",
+          "httpStatus": 200,
+          "durationMs": 12036,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "equipment",
+              "promptSpan": "the equipment you need",
+              "state": "known",
+              "notesQuote": "I need a portable projector.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "a portable projector"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "purpose",
+              "promptSpan": "what you will use it for",
+              "state": "known",
+              "notesQuote": "I will use it to display a campus map during our fictional club orientation.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "to display a campus map during our fictional club orientation"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "collection",
+              "promptSpan": "when you need to collect it",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "return",
+              "promptSpan": "when you can return it",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "equipment needed",
+              "promptQuote": "Describe the equipment you need",
+              "value": "a portable projector",
+              "mappedAskIds": [
+                "equipment"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I need a portable projector.",
+                  "start": 0,
+                  "end": 28
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "intended use",
+              "promptQuote": "what you will use it for",
+              "value": "to display a campus map during our fictional club orientation",
+              "mappedAskIds": [
+                "purpose"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I will use it to display a campus map during our fictional club orientation.",
+                  "start": 29,
+                  "end": 105
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "collection time",
+              "promptQuote": "when you need to collect it",
+              "value": "",
+              "mappedAskIds": [
+                "collection"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "return time",
+              "promptQuote": "when you can return it",
+              "value": "",
+              "mappedAskIds": [
+                "return"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            }
+          ],
+          "mainAnswer": "I need a portable projector. I will use it to display a campus map during our fictional club orientation.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 3,
+          "exactExcerptChecksPassed": 3,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        },
+        {
+          "caseId": "volunteer-availability",
+          "httpStatus": 200,
+          "durationMs": 11636,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "shifts",
+              "promptSpan": "which shifts you can cover",
+              "state": "known",
+              "notesQuote": "I can cover Saturday morning and Sunday afternoon.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "Saturday morning and Sunday afternoon"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "tasks",
+              "promptSpan": "the tasks you are comfortable doing",
+              "state": "known",
+              "notesQuote": "I am comfortable greeting visitors and checking names on a signup list.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "greeting visitors and checking names on a signup list"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "lifting",
+              "promptSpan": "whether you can lift supply boxes",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "transport",
+              "promptSpan": "your transport plan",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "shifts",
+              "promptQuote": "which shifts you can cover",
+              "value": "Saturday morning and Sunday afternoon",
+              "mappedAskIds": [
+                "shifts"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I can cover Saturday morning and Sunday afternoon.",
+                  "start": 0,
+                  "end": 50
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "tasks",
+              "promptQuote": "the tasks you are comfortable doing",
+              "value": "greeting visitors and checking names on a signup list",
+              "mappedAskIds": [
+                "tasks"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I am comfortable greeting visitors and checking names on a signup list.",
+                  "start": 51,
+                  "end": 122
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "lifting",
+              "promptQuote": "whether you can lift supply boxes",
+              "value": "",
+              "mappedAskIds": [
+                "lifting"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "transport",
+              "promptQuote": "your transport plan",
+              "value": "",
+              "mappedAskIds": [
+                "transport"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            }
+          ],
+          "mainAnswer": "I can cover Saturday morning and Sunday afternoon. I am comfortable greeting visitors and checking names on a signup list.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 3,
+          "exactExcerptChecksPassed": 3,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        },
+        {
+          "caseId": "internship-project",
+          "httpStatus": 200,
+          "durationMs": 14167,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "project",
+              "promptSpan": "one project you contributed to",
+              "state": "known",
+              "notesQuote": "For a class, I helped build a library-room occupancy display.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "a library-room occupancy display"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "contribution",
+              "promptSpan": "your own contribution",
+              "state": "known",
+              "notesQuote": "My contribution was writing the CSV import routine and documenting its columns.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "writing the CSV import routine and documenting its columns"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "result",
+              "promptSpan": "a measurable result",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "change",
+              "promptSpan": "what you would change next time",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": "I have not decided what I would change next time."
+                }
+              ],
+              "status": "NONBLANK ON MISSING ASK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "project description",
+              "promptQuote": "Describe one project you contributed to",
+              "value": "a library-room occupancy display",
+              "mappedAskIds": [
+                "project"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I helped build a library-room occupancy display.",
+                  "start": 13,
+                  "end": 61
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "own contribution",
+              "promptQuote": "your own contribution",
+              "value": "writing the CSV import routine and documenting its columns",
+              "mappedAskIds": [
+                "contribution"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "My contribution was writing the CSV import routine and documenting its columns.",
+                  "start": 62,
+                  "end": 141
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "measurable result",
+              "promptQuote": "a measurable result",
+              "value": "",
+              "mappedAskIds": [
+                "result"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "future changes",
+              "promptQuote": "what you would change next time",
+              "value": "I have not decided what I would change next time.",
+              "mappedAskIds": [
+                "change"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I have not decided what I would change next time.",
+                  "start": 183,
+                  "end": 232
+                }
+              ]
+            }
+          ],
+          "mainAnswer": "For a class, I helped build a library-room occupancy display. My contribution was writing the CSV import routine and documenting its columns. We did not record usage or time savings. I have not decided what I would change next time.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 4,
+          "exactExcerptChecksPassed": 4,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        },
+        {
+          "caseId": "maintenance-request",
+          "httpStatus": 200,
+          "durationMs": 13842,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "repair",
+              "promptSpan": "what needs repair",
+              "state": "known",
+              "notesQuote": "The wall-mounted shelf is loose in our fictional shared workshop.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "The wall-mounted shelf is loose"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "location",
+              "promptSpan": "where it is located",
+              "state": "known",
+              "notesQuote": "It is beside the north window.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "in our fictional shared workshop. It is beside the north window."
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "entry",
+              "promptSpan": "when someone can enter",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "previous-repair",
+              "promptSpan": "whether anyone has already tried a repair",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": "I have no record of previous repair attempts."
+                }
+              ],
+              "status": "NONBLANK ON MISSING ASK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "repair description",
+              "promptQuote": "Explain what needs repair",
+              "value": "The wall-mounted shelf is loose",
+              "mappedAskIds": [
+                "repair"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "The wall-mounted shelf is loose",
+                  "start": 0,
+                  "end": 31
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "location",
+              "promptQuote": "where it is located",
+              "value": "in our fictional shared workshop. It is beside the north window.",
+              "mappedAskIds": [
+                "location"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "in our fictional shared workshop. It is beside the north window.",
+                  "start": 32,
+                  "end": 96
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "access time",
+              "promptQuote": "when someone can enter",
+              "value": "",
+              "mappedAskIds": [
+                "entry"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "previous attempts",
+              "promptQuote": "whether anyone has already tried a repair",
+              "value": "I have no record of previous repair attempts.",
+              "mappedAskIds": [
+                "previous-repair"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I have no record of previous repair attempts.",
+                  "start": 159,
+                  "end": 204
+                }
+              ]
+            }
+          ],
+          "mainAnswer": "The wall-mounted shelf is loose in our fictional shared workshop. It is beside the north window. I do not know when the room can be opened for a repair visit. I have no record of previous repair attempts.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 4,
+          "exactExcerptChecksPassed": 4,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        },
+        {
+          "caseId": "community-event-request",
+          "httpStatus": 200,
+          "durationMs": 11830,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "activity",
+              "promptSpan": "the activity you want to run",
+              "state": "known",
+              "notesQuote": "Our fictional neighborhood group would like to run a seed-swap afternoon.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "seed-swap afternoon"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "audience",
+              "promptSpan": "the intended audience",
+              "state": "known",
+              "notesQuote": "The intended audience is residents who are beginning home gardeners.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "residents who are beginning home gardeners"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "attendance",
+              "promptSpan": "your expected attendance",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "date",
+              "promptSpan": "your requested date",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "activity",
+              "promptQuote": "Describe the activity you want to run",
+              "value": "seed-swap afternoon",
+              "mappedAskIds": [
+                "activity"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "seed-swap afternoon",
+                  "start": 53,
+                  "end": 72
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "audience",
+              "promptQuote": "the intended audience",
+              "value": "residents who are beginning home gardeners",
+              "mappedAskIds": [
+                "audience"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "The intended audience is residents who are beginning home gardeners.",
+                  "start": 74,
+                  "end": 142
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "attendance",
+              "promptQuote": "your expected attendance",
+              "value": "",
+              "mappedAskIds": [
+                "attendance"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "date",
+              "promptQuote": "your requested date",
+              "value": "",
+              "mappedAskIds": [
+                "date"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            }
+          ],
+          "mainAnswer": "I would like to run a seed-swap afternoon. The intended audience is residents who are beginning home gardeners.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 3,
+          "exactExcerptChecksPassed": 3,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        },
+        {
+          "caseId": "student-support",
+          "httpStatus": 200,
+          "durationMs": 13151,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "difficulty",
+              "promptSpan": "the difficulty you are experiencing",
+              "state": "known",
+              "notesQuote": "The desk lamp in my shared study area stopped working.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "The desk lamp in my shared study area stopped working."
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "impact",
+              "promptSpan": "how it affects your coursework",
+              "state": "known",
+              "notesQuote": "I can no longer read printed diagrams there during evening coursework.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "I can no longer read printed diagrams there during evening coursework."
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "support",
+              "promptSpan": "the specific support you are requesting",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "other-help",
+              "promptSpan": "other help you have already tried",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "difficulty",
+              "promptQuote": "Describe the difficulty you are experiencing",
+              "value": "The desk lamp in my shared study area stopped working.",
+              "mappedAskIds": [
+                "difficulty"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "The desk lamp in my shared study area stopped working.",
+                  "start": 0,
+                  "end": 54
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "coursework impact",
+              "promptQuote": "how it affects your coursework",
+              "value": "I can no longer read printed diagrams there during evening coursework.",
+              "mappedAskIds": [
+                "impact"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I can no longer read printed diagrams there during evening coursework.",
+                  "start": 55,
+                  "end": 125
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "requested support",
+              "promptQuote": "the specific support you are requesting",
+              "value": "",
+              "mappedAskIds": [
+                "support"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "previous help",
+              "promptQuote": "other help you have already tried",
+              "value": "",
+              "mappedAskIds": [
+                "other-help"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            }
+          ],
+          "mainAnswer": "The desk lamp in my shared study area stopped working. I can no longer read printed diagrams there during evening coursework. I have not chosen what support to request and I have not written down whether I tried any other help.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 3,
+          "exactExcerptChecksPassed": 3,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        }
+      ]
+    },
+    {
+      "stage": "after uncertainty instruction refinement",
+      "runId": "2026-10-25T07-41-47Z",
+      "fixtureSha256": "7b901f8a702b85081e2eb6d4cd3464d5ff583ef8a65284ca9e622a729daaa25c",
+      "totals": {
+        "callsAttempted": 6,
+        "http200": 6,
+        "liveResponses": 6,
+        "declaredAsks": 24,
+        "mappedAsks": 24,
+        "omittedOrUnmappedAsks": 0,
+        "knownAsks": 12,
+        "knownProposalsPresent": 12,
+        "missingAsks": 12,
+        "missingAsksMappedBlank": 12,
+        "missingAsksMappedNonblank": 0,
+        "missingAsksUnassessed": 0,
+        "returnedParts": 24,
+        "unmappedReturnedParts": 0,
+        "mergedReturnedParts": 0,
+        "literalPromptMatches": 24,
+        "nonblankProposals": 17,
+        "exactExcerptChecksPassed": 17,
+        "invalidExcerptChecks": 0,
+        "unexpectedCoverageFields": 0,
+        "rejectedAnswers": 0
+      },
+      "results": [
+        {
+          "caseId": "equipment-request",
+          "httpStatus": 200,
+          "durationMs": 12063,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "equipment",
+              "promptSpan": "the equipment you need",
+              "state": "known",
+              "notesQuote": "I need a portable projector.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "a portable projector"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "purpose",
+              "promptSpan": "what you will use it for",
+              "state": "known",
+              "notesQuote": "I will use it to display a campus map during our fictional club orientation.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "to display a campus map during our fictional club orientation"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "collection",
+              "promptSpan": "when you need to collect it",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "return",
+              "promptSpan": "when you can return it",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "equipment needed",
+              "promptQuote": "Describe the equipment you need",
+              "value": "a portable projector",
+              "mappedAskIds": [
+                "equipment"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I need a portable projector.",
+                  "start": 0,
+                  "end": 28
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "intended use",
+              "promptQuote": "what you will use it for",
+              "value": "to display a campus map during our fictional club orientation",
+              "mappedAskIds": [
+                "purpose"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I will use it to display a campus map during our fictional club orientation.",
+                  "start": 29,
+                  "end": 105
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "collection time",
+              "promptQuote": "when you need to collect it",
+              "value": "",
+              "mappedAskIds": [
+                "collection"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "return time",
+              "promptQuote": "when you can return it",
+              "value": "",
+              "mappedAskIds": [
+                "return"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            }
+          ],
+          "mainAnswer": "I need a portable projector. I will use it to display a campus map during our fictional club orientation.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 3,
+          "exactExcerptChecksPassed": 3,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        },
+        {
+          "caseId": "volunteer-availability",
+          "httpStatus": 200,
+          "durationMs": 12103,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "shifts",
+              "promptSpan": "which shifts you can cover",
+              "state": "known",
+              "notesQuote": "I can cover Saturday morning and Sunday afternoon.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "Saturday morning and Sunday afternoon"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "tasks",
+              "promptSpan": "the tasks you are comfortable doing",
+              "state": "known",
+              "notesQuote": "I am comfortable greeting visitors and checking names on a signup list.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "greeting visitors and checking names on a signup list"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "lifting",
+              "promptSpan": "whether you can lift supply boxes",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "transport",
+              "promptSpan": "your transport plan",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "shifts",
+              "promptQuote": "Tell us which shifts you can cover",
+              "value": "Saturday morning and Sunday afternoon",
+              "mappedAskIds": [
+                "shifts"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I can cover Saturday morning and Sunday afternoon.",
+                  "start": 0,
+                  "end": 50
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "tasks",
+              "promptQuote": "the tasks you are comfortable doing",
+              "value": "greeting visitors and checking names on a signup list",
+              "mappedAskIds": [
+                "tasks"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I am comfortable greeting visitors and checking names on a signup list.",
+                  "start": 51,
+                  "end": 122
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "lifting",
+              "promptQuote": "whether you can lift supply boxes",
+              "value": "",
+              "mappedAskIds": [
+                "lifting"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "transport",
+              "promptQuote": "and your transport plan",
+              "value": "",
+              "mappedAskIds": [
+                "transport"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            }
+          ],
+          "mainAnswer": "I can cover Saturday morning and Sunday afternoon. I am comfortable greeting visitors and checking names on a signup list.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 3,
+          "exactExcerptChecksPassed": 3,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        },
+        {
+          "caseId": "internship-project",
+          "httpStatus": 200,
+          "durationMs": 12127,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "project",
+              "promptSpan": "one project you contributed to",
+              "state": "known",
+              "notesQuote": "For a class, I helped build a library-room occupancy display.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "a library-room occupancy display"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "contribution",
+              "promptSpan": "your own contribution",
+              "state": "known",
+              "notesQuote": "My contribution was writing the CSV import routine and documenting its columns.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "writing the CSV import routine and documenting its columns"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "result",
+              "promptSpan": "a measurable result",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "change",
+              "promptSpan": "what you would change next time",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "project",
+              "promptQuote": "Describe one project you contributed to",
+              "value": "a library-room occupancy display",
+              "mappedAskIds": [
+                "project"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I helped build a library-room occupancy display.",
+                  "start": 13,
+                  "end": 61
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "contribution",
+              "promptQuote": "your own contribution",
+              "value": "writing the CSV import routine and documenting its columns",
+              "mappedAskIds": [
+                "contribution"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "My contribution was writing the CSV import routine and documenting its columns.",
+                  "start": 62,
+                  "end": 141
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "result",
+              "promptQuote": "a measurable result",
+              "value": "",
+              "mappedAskIds": [
+                "result"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "changes",
+              "promptQuote": "what you would change next time",
+              "value": "",
+              "mappedAskIds": [
+                "change"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            }
+          ],
+          "mainAnswer": "For a class, I helped build a library-room occupancy display. My contribution was writing the CSV import routine and documenting its columns.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 3,
+          "exactExcerptChecksPassed": 3,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        },
+        {
+          "caseId": "maintenance-request",
+          "httpStatus": 200,
+          "durationMs": 11730,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "repair",
+              "promptSpan": "what needs repair",
+              "state": "known",
+              "notesQuote": "The wall-mounted shelf is loose in our fictional shared workshop.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "The wall-mounted shelf is loose"
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "location",
+              "promptSpan": "where it is located",
+              "state": "known",
+              "notesQuote": "It is beside the north window.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "in our fictional shared workshop. It is beside the north window."
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "entry",
+              "promptSpan": "when someone can enter",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "previous-repair",
+              "promptSpan": "whether anyone has already tried a repair",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "repair description",
+              "promptQuote": "Explain what needs repair",
+              "value": "The wall-mounted shelf is loose",
+              "mappedAskIds": [
+                "repair"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "The wall-mounted shelf is loose",
+                  "start": 0,
+                  "end": 31
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "location",
+              "promptQuote": "where it is located",
+              "value": "in our fictional shared workshop. It is beside the north window.",
+              "mappedAskIds": [
+                "location"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "in our fictional shared workshop. It is beside the north window.",
+                  "start": 32,
+                  "end": 96
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "entry time",
+              "promptQuote": "when someone can enter",
+              "value": "",
+              "mappedAskIds": [
+                "entry"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "previous repair",
+              "promptQuote": "whether anyone has already tried a repair",
+              "value": "",
+              "mappedAskIds": [
+                "previous-repair"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            }
+          ],
+          "mainAnswer": "The wall-mounted shelf is loose in our fictional shared workshop. It is beside the north window.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 3,
+          "exactExcerptChecksPassed": 3,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        },
+        {
+          "caseId": "community-event-request",
+          "httpStatus": 200,
+          "durationMs": 9720,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "activity",
+              "promptSpan": "the activity you want to run",
+              "state": "known",
+              "notesQuote": "Our fictional neighborhood group would like to run a seed-swap afternoon.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "I would like to run a seed-swap afternoon."
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "audience",
+              "promptSpan": "the intended audience",
+              "state": "known",
+              "notesQuote": "The intended audience is residents who are beginning home gardeners.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "The intended audience is residents who are beginning home gardeners."
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "attendance",
+              "promptSpan": "your expected attendance",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "date",
+              "promptSpan": "your requested date",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "activity",
+              "promptQuote": "Describe the activity you want to run",
+              "value": "I would like to run a seed-swap afternoon.",
+              "mappedAskIds": [
+                "activity"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "Our fictional neighborhood group would like to run a seed-swap afternoon.",
+                  "start": 0,
+                  "end": 73
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "audience",
+              "promptQuote": "the intended audience",
+              "value": "The intended audience is residents who are beginning home gardeners.",
+              "mappedAskIds": [
+                "audience"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "The intended audience is residents who are beginning home gardeners.",
+                  "start": 74,
+                  "end": 142
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "attendance",
+              "promptQuote": "your expected attendance",
+              "value": "",
+              "mappedAskIds": [
+                "attendance"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "date",
+              "promptQuote": "your requested date",
+              "value": "",
+              "mappedAskIds": [
+                "date"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            }
+          ],
+          "mainAnswer": "",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 2,
+          "exactExcerptChecksPassed": 2,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        },
+        {
+          "caseId": "student-support",
+          "httpStatus": 200,
+          "durationMs": 12501,
+          "transportStatus": "json-response",
+          "liveResponse": true,
+          "engine": {
+            "provider": "google",
+            "model": "gemma-4-26b-a4b-it",
+            "available": true
+          },
+          "asks": [
+            {
+              "id": "difficulty",
+              "promptSpan": "the difficulty you are experiencing",
+              "state": "known",
+              "notesQuote": "The desk lamp in my shared study area stopped working.",
+              "mappedPartIds": [
+                "part-1"
+              ],
+              "proposals": [
+                {
+                  "id": "part-1",
+                  "value": "The desk lamp in my shared study area stopped working."
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "impact",
+              "promptSpan": "how it affects your coursework",
+              "state": "known",
+              "notesQuote": "I can no longer read printed diagrams there during evening coursework.",
+              "mappedPartIds": [
+                "part-2"
+              ],
+              "proposals": [
+                {
+                  "id": "part-2",
+                  "value": "I can no longer read printed diagrams there during evening coursework."
+                }
+              ],
+              "status": "PROPOSAL PRESENT"
+            },
+            {
+              "id": "support",
+              "promptSpan": "the specific support you are requesting",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-3"
+              ],
+              "proposals": [
+                {
+                  "id": "part-3",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            },
+            {
+              "id": "other-help",
+              "promptSpan": "other help you have already tried",
+              "state": "missing",
+              "notesQuote": null,
+              "mappedPartIds": [
+                "part-4"
+              ],
+              "proposals": [
+                {
+                  "id": "part-4",
+                  "value": ""
+                }
+              ],
+              "status": "BLANK"
+            }
+          ],
+          "returned": [
+            {
+              "id": "part-1",
+              "label": "difficulty",
+              "promptQuote": "Describe the difficulty you are experiencing",
+              "value": "The desk lamp in my shared study area stopped working.",
+              "mappedAskIds": [
+                "difficulty"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "The desk lamp in my shared study area stopped working.",
+                  "start": 0,
+                  "end": 54
+                }
+              ]
+            },
+            {
+              "id": "part-2",
+              "label": "coursework effect",
+              "promptQuote": "how it affects your coursework",
+              "value": "I can no longer read printed diagrams there during evening coursework.",
+              "mappedAskIds": [
+                "impact"
+              ],
+              "literalPromptMatch": true,
+              "evidence": [
+                {
+                  "sourceId": "synthetic-notes",
+                  "quote": "I can no longer read printed diagrams there during evening coursework.",
+                  "start": 55,
+                  "end": 125
+                }
+              ]
+            },
+            {
+              "id": "part-3",
+              "label": "support requested",
+              "promptQuote": "the specific support you are requesting",
+              "value": "",
+              "mappedAskIds": [
+                "support"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            },
+            {
+              "id": "part-4",
+              "label": "help tried",
+              "promptQuote": "and other help you have already tried",
+              "value": "",
+              "mappedAskIds": [
+                "other-help"
+              ],
+              "literalPromptMatch": true,
+              "evidence": []
+            }
+          ],
+          "mainAnswer": "The desk lamp in my shared study area stopped working. I can no longer read printed diagrams there during evening coursework.",
+          "rejectedAnswerCount": 0,
+          "nonblankProposalCount": 3,
+          "exactExcerptChecksPassed": 3,
+          "invalidExcerptChecks": 0,
+          "unexpectedFieldCount": 0
+        }
+      ]
+    }
+  ]
+}

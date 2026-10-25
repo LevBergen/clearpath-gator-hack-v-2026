@@ -6,66 +6,66 @@ Clearpath
 
 ## Elevator pitch
 
-Turn confusing application questions into clear steps, draft answers from your own notes, and review the evidence before you export.
+A good paragraph can miss part of the question. Clearpath helps you spot the gaps, add your own details, and review the answer before you use it.
 
 ## About the project
 
 ### Inspiration
 
-A form can ask for something simple in language that makes it feel impossible. For someone already dealing with a broken laptop, a work shift, or a stressful deadline, that extra barrier matters. We wanted the next step to feel understandable and manageable.
+“Describe the unexpected expense and how it affects your coursework. Include the amount you are requesting and any other financial help you have already tried.”
+
+That is one application question with four things to answer. A paragraph about a broken laptop can sound complete while leaving out the amount and other help tried. I built Clearpath to help applicants catch that omission.
 
 ### What it does
 
-Clearpath turns a text application into a guided workspace. It keeps the original question visible, offers a plain-English guide, and drafts from information the applicant supplies. Each generated answer includes source excerpts that the application checks against those notes.
+Clearpath keeps the original question visible and suggests its separate parts, each linked to words in the question. The applicant checks that breakdown, confirms details drawn from their notes, and answers focused follow-ups where information is missing.
 
-If a fact is missing, the space stays open. In our fictional student-support example, Maya has explained why she needs a working laptop but has not confirmed a replacement price. Clearpath drafts her circumstances and study plan while leaving the requested amount unanswered.
+In the fictional demo, Maya's notes explain her laptop failure and the effect on coursework. The amount and other help tried stay open for her to supply. Clearpath joins the details she confirms into an editable answer. She reviews the final wording before downloading a text packet.
 
-Applicants can edit answers, use read-aloud, work one question at a time, save an unfinished workspace locally, and resume later. A reviewed text packet becomes downloadable only after required answers are complete and every completed answer has been reviewed. Clearpath does not submit applications.
+People can bring their own text forms, use read-aloud, and save unfinished work locally without an account. Clearpath does not submit applications.
 
-### How we built it
+### How I built it
 
-The prototype was written from scratch during the event with AI coding assistance. It uses React, TypeScript, Vite, Express, and shared Zod validation. Pure domain functions handle evidence checks, field validation, review state, and export.
+I built Clearpath from scratch during Gator Hack V with Codex assistance in product exploration, implementation, debugging, and tests.
 
-The model is **Gemma 4 `gemma-4-26b-a4b-it`**, called through the Gemini API. It proposes answers and plain-language question guides; application code checks exact excerpt matches and validates scalar values. The model cannot approve a review, execute tools, or submit a form. Keys stay on the server.
+The React and TypeScript interface connects to an Express server that calls **Gemma 4 `gemma-4-26b-a4b-it`** through the Gemini API. Gemma proposes question breakdowns and drafts from supplied notes. The app checks quoted text against those notes and the original question. Building the answer joins confirmed details without another generation step.
+
+The sample begins with labeled illustrations so it can be explored immediately. The drafting button calls the real model.
 
 ### Challenges
 
-A valid source quote is not the same as a true answer. We made that distinction explicit and kept the human review gate. We also had to prevent old model results from overwriting newer edits, preserve notes during asynchronous file imports, and distinguish authored sample drafts from real inference.
+A real quote can still be used to support the wrong claim. A breakdown can also quote the question while missing an important qualifier. Checking that text is present cannot establish truth or completeness. Keeping the original wording visible gives the applicant something concrete to check at each step.
 
-A live integration test exposed latency from Gemma's default thinking behavior. We used the documented minimal-thinking configuration for this bounded drafting task and exercised the full application again successfully.
+Edits and saved work raised another problem: an old review should not approve new wording. Editing an answer or restoring a workspace resets its confirmations.
 
 ### Accomplishments
 
-The complete local workflow runs from imported questions to a reviewed download. The live Gemma example produced five sourced answers and seven question guides while leaving the unknown amount blank. Automated domain, API, browser, and accessibility checks accompany the implementation.
+The flow works from rough notes through follow-ups to a reviewed download. A live Gemma run produced four parts for the demo question and left the two unknown details open. Automated domain, API, and browser checks cover edits, review, export, and save/resume.
 
-### What we learned
+### What I learned
 
-Useful AI assistance includes knowing when to leave a blank. Showing the original question, supporting excerpts, and an editable draft together makes it easier to inspect the output than a chat transcript alone.
+Asking “What other help have you tried?” can be more useful than polishing the paragraph again. It gives the applicant a next step that answers the original question.
 
 ### What's next
 
-Test with actual applicants and campus support staff, measure whether the guides preserve every requirement, add carefully reviewed PDF/image import, and evaluate multilingual explanations. We have not run a user study or established an improvement in completion rates.
+Test with applicants and support staff: do they notice omissions, do the guides preserve qualifiers, and where does the app add work? No applicant study has been conducted yet.
 
-### Current limits
+The prototype takes text forms and notes; PDF/image import can follow that testing. It does not verify facts or determine eligibility.
 
-This prototype accepts text questions and text/Markdown notes. It does not establish eligibility, verify facts, discover funding opportunities, fill arbitrary websites, or submit anything. Excerpt checks do not prove that a model interpreted the source correctly. Human review is required. The example applicant and support fund are fictional. Google receives notes when AI drafting is requested.
+The fictional exercise draws on public [University of Minnesota emergency-funding instructions](https://onestop.umn.edu/finances/types-financial-aid/student-emergency-funds) and the [University of Florida Aid-a-Gator overview](https://www.sfa.ufl.edu/aidagator/), without institutional affiliation. AI drafting sends the form and notes to Google.
 
 ## Built with
 
 TypeScript, React, Vite, Express, Gemma, Gemini API, Zod, Vitest, Playwright, axe-core
 
-## Try it out links
+## Links and media to add in Devpost
 
-Add the actual public code repository and deployed demo URL after publication. Do not submit a localhost URL.
+Use the actual public repository, deployed app, and YouTube/Vimeo video links after publication. Add the thumbnail and gallery images from `submission/`. Check that the video plays and meets the three-minute limit. The replacement narration uses Gemini 3.8 with the Orus male voice; disclose that it is synthetic.
 
-## Prize selections
+## Owner completion notes — not part of the project story
 
-- Main awards.
-- Best Use of Gemma: model is named above and live inference has been exercised.
-- Best Open Source Project: select only after the public repository includes LICENSE.
-- Vobile: confirm any opening-ceremony challenge requirements before selecting.
-- Twinly: not selected; Twinly has not been integrated.
+Aim to finish before **11 AM Eastern on Sunday, October 25, 2026**. The official deadline is **5 PM Eastern**.
 
-## Owner completion
+Enter the real registered participants and their school/department details. The build described here is Lev's work with AI assistance; do not attribute development or testing to a partner who did not do it. Confirm the event's two-department requirement, AI-assistance policy, and any opening-ceremony challenge requirements.
 
-Add the real registered partner and correct school/department details. Confirm the two-department rule and AI-assistance policy with the event. Add actual YouTube/Vimeo demo URL after upload. Final Devpost submission is the owner's action.
+Consider Main awards and Best Use of Gemma. Select Best Open Source Project after publishing the repository with its MIT license. Confirm Vobile's requirements before selecting it. Twinly is not integrated. Lev performs the final publication and Devpost submission.

@@ -13,4 +13,12 @@ test("home and workspace have no detected WCAG A or AA violations", async ({
     .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
     .analyze();
   expect(workspace.violations).toEqual([]);
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: "Try the missing-details challenge" })
+    .click();
+  const coverage = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+    .analyze();
+  expect(coverage.violations).toEqual([]);
 });

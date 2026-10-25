@@ -2,52 +2,14 @@ import { chromium } from "@playwright/test";
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { narration } from "./demo-narration.mjs";
 const build = path.resolve("submission/.build");
 fs.mkdirSync(path.join(build, "video"), { recursive: true });
-const segments = [
-  [
-    "A clearer way forward",
-    "A student needs a working laptop to keep up with class. But the support application asks them to describe the unforeseen circumstances necessitating assistance. The opportunity is helpful. The form is hard to start. Clearpath turns that moment into a clearer next step.",
-  ],
-  [
-    "Fictional applicant · illustrative starting drafts",
-    "This is Maya, a fictional student, and this is a fictional support application. Clearpath keeps the original question visible and offers a simpler guide. What happened, and how is it making college harder? Her notes and supporting excerpts stay beside the answer. The starting drafts are labeled examples, not a live generation.",
-  ],
-  [
-    "Real Gemma 4 call · waiting time retained",
-    "Now we call Gemma four with the actual questions and notes. This is real inference, and the waiting time is kept in this recording. The model suggests answers and plain language question guides. The application checks each quoted excerpt against the supplied notes. Unsupported source quotes are rejected. The model cannot approve the application or submit it.",
-  ],
-  [
-    "A source match is not a fact check",
-    "The model has drafted the supported details. Here is the situation, alongside the exact words it used from Maya’s notes. A matching excerpt does not establish that an answer is true or complete. The applicant can inspect the original question, change the wording, and check every answer before using it.",
-  ],
-  [
-    "Unknown information stays open",
-    "One important space remains empty. Maya has not checked the cost of a replacement, so there is no requested amount in her notes. Clearpath asks instead of making one up. For this fictional demonstration, Maya has now confirmed an amount of four hundred fifty dollars, and enters it herself.",
-  ],
-  [
-    "Review each answer · then export",
-    "Next comes human review. Each completed answer needs an explicit confirmation, including answers written by the applicant. Editing an answer removes that confirmation. The download stays unavailable until every required field is valid and every completed answer has been reviewed. The final decision stays with the person applying.",
-  ],
-  [
-    "Local download · nothing submitted",
-    "The result is a reviewed text packet downloaded to this device. Nothing has been submitted. Unfinished work can also be saved locally and resumed later. Clearpath currently accepts text forms and notes. It does not decide eligibility or verify facts. The next step is testing these guides with real applicants and support staff. More possibility. Less paperwork.",
-  ],
-];
+const segments = narration.segments;
 const durations = [];
 for (let i = 0; i < segments.length; i++) {
-  const file = path.join(build, "narration-" + i + ".txt");
-  fs.writeFileSync(file, segments[i][1]);
-  execFileSync("say", [
-    "-v",
-    "Samantha",
-    "-r",
-    "160",
-    "-f",
-    file,
-    "-o",
-    path.join(build, "narration-" + i + ".aiff"),
-  ]);
+  if (!fs.existsSync(path.join(build, "narration-" + i + ".wav")))
+    throw new Error("Run node scripts/generate-narration.mjs first.");
   durations.push(
     Number(
       execFileSync(
@@ -59,7 +21,7 @@ for (let i = 0; i < segments.length; i++) {
           "format=duration",
           "-of",
           "default=noprint_wrappers=1:nokey=1",
-          path.join(build, "narration-" + i + ".aiff"),
+          path.join(build, "narration-" + i + ".wav"),
         ],
         { encoding: "utf8" },
       ).trim(),
@@ -86,6 +48,7 @@ const context = await browser.newContext({
 });
 const page = await context.newPage();
 const timeline = [];
+let liveParts = [];
 async function caption(text) {
   await page.evaluate((text) => {
     let el = document.getElementById("demo-caption");
@@ -124,7 +87,9 @@ try {
   await page.waitForTimeout(1500);
   await segment(0, async () => {});
   await segment(1, async () => {
-    await page.getByRole("button", { name: "Explore a sample" }).click();
+    await page
+      .getByRole("button", { name: "Try the missing-details challenge" })
+      .click();
     await page.locator(".original-question").scrollIntoViewIfNeeded();
   });
   await segment(2, async () => {
@@ -140,25 +105,63 @@ try {
     if (!response.ok())
       throw new Error("Live inference failed during recording");
     const data = await response.json();
-    if (!data.answers.circumstances || data.answers.amount)
+    liveParts = data.coverage?.story?.parts || [];
+    if (
+      !data.answers.story ||
+      liveParts.length !== 4 ||
+      liveParts.filter((part) => !part.value.trim()).length !== 2
+    )
       throw new Error("Live output did not match this demonstration");
     await page.getByRole("button", { name: /Question 4:/ }).click();
   });
   await segment(3, async () => {
-    await page.locator(".work-grid").scrollIntoViewIfNeeded();
+    await page.locator(".coverage-card").scrollIntoViewIfNeeded();
+    await page
+      .getByRole("button", { name: "This breakdown matches the question" })
+      .click();
+    for (const [index, part] of liveParts.entries()) {
+      if (!part.value.trim()) continue;
+      await page
+        .getByRole("button", {
+          name: "Check part " + (index + 1) + ": " + part.label,
+          exact: true,
+        })
+        .click();
+      const evidence = page.locator(".part-evidence summary");
+      if (await evidence.count()) await evidence.click();
+      await page.waitForTimeout(1200);
+      await page.getByRole("button", { name: "Confirm this detail" }).click();
+    }
   });
   await segment(4, async () => {
+    for (const [index, part] of liveParts.entries()) {
+      if (part.value.trim()) continue;
+      await page
+        .getByRole("button", {
+          name: "Check part " + (index + 1) + ": " + part.label,
+          exact: true,
+        })
+        .click();
+      const value = /amount/i.test(part.promptQuote)
+        ? "I am requesting 450 dollars."
+        : "I have not tried other financial help yet.";
+      await page
+        .getByLabel("Detail: " + part.label, { exact: true })
+        .fill(value);
+      await page.waitForTimeout(800);
+      await page.getByRole("button", { name: "Confirm this detail" }).click();
+    }
     await page
-      .getByRole("button", { name: "Answer the missing question" })
+      .getByRole("button", { name: "Build my answer from these details" })
       .click();
-    await page.getByLabel("Answer: Amount requested").fill("450");
+    await page.locator(".editor-card").scrollIntoViewIfNeeded();
   });
   await segment(5, async () => {
     await page
       .getByRole("button", { name: "Review & export", exact: true })
       .click();
     await page.getByRole("button", { name: "Review every answer" }).click();
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 4; i++) {
       await page.waitForTimeout(1200);
       await page
         .getByRole("button", { name: "This answer is accurate" })
@@ -176,7 +179,7 @@ try {
   const audioInputs = [];
   const chains = [];
   for (let i = 0; i < segments.length; i++) {
-    audioInputs.push("-i", path.join(build, "narration-" + i + ".aiff"));
+    audioInputs.push("-i", path.join(build, "narration-" + i + ".wav"));
     chains.push(
       "[" +
         i +
@@ -193,7 +196,7 @@ try {
     timeline.map((_, i) => "[a" + i + "]").join("") +
     "concat=n=" +
     segments.length +
-    ":v=0:a=1,adelay=1500|1500[out]";
+    ":v=0:a=1,adelay=1500|1500,loudnorm=I=-16:TP=-1.5:LRA=11[out]";
   execFileSync("ffmpeg", [
     "-y",
     "-loglevel",
@@ -251,7 +254,7 @@ try {
     JSON.stringify(
       {
         durationSeconds: seconds,
-        narration: "Synthetic macOS Samantha voice",
+        narration: "Synthetic male Orus voice via " + narration.model,
         fictionalData: true,
         liveModel: "gemma-4-26b-a4b-it",
         waitingTimeRetained: true,

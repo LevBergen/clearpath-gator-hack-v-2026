@@ -1,37 +1,38 @@
 {
-  "durationSeconds": 138.84,
-  "narration": "Synthetic macOS Samantha voice",
+  "durationSeconds": 135.5,
+  "narration": "Synthetic male Orus voice via gemini-3.8-flash-tts",
   "fictionalData": true,
   "liveModel": "gemma-4-26b-a4b-it",
   "waitingTimeRetained": true,
   "segments": [
     {
       "segment": 0,
-      "duration": 17.162
+      "duration": 16.121
     },
     {
       "segment": 1,
-      "duration": 20.031
+      "duration": 17.203
     },
     {
       "segment": 2,
-      "duration": 21.119
+      "duration": 20.352
     },
     {
       "segment": 3,
-      "duration": 18.422
+      "duration": 16.161
     },
     {
       "segment": 4,
-      "duration": 18.131
+      "duration": 18.242
     },
     {
       "segment": 5,
-      "duration": 19.83
+      "duration": 19.601
     },
     {
       "segment": 6,
-      "duration": 22.645
+      "duration": 26.241
     }
-  ]
+  ],
+  "audioNormalization": "Integrated target -16 LUFS, true peak target -1.5 dBTP"
 }

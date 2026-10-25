@@ -1,160 +1,210 @@
 <!doctype html>
 <html lang="en">
-  <meta charset="utf-8" /><title>Clearpath submission thumbnail</title
-  ><style>
-    @font-face {
-      font-family: DM;
-      src: url("/node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2");
-    }
-    @font-face {
-      font-family: Serif;
-      src: url("/node_modules/@fontsource/dm-serif-display/files/dm-serif-display-latin-400-normal.woff2");
-    }
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      background: #f5f4ee;
-      color: #244d3d;
-      width: 1500px;
-      height: 1000px;
-      overflow: hidden;
-      font-family: DM, sans-serif;
-      padding: 76px 90px;
-      position: relative;
-    }
-    .brand {
-      font-size: 42px;
-      letter-spacing: -2px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .mark {
-      border-radius: 18px 18px 18px 3px;
-      background: #245747;
-      color: #e9f1bd;
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 47px;
-      font-family: Serif, serif;
-    }
-    h1 {
-      font-family: Serif, serif;
-      font-size: 97px;
-      line-height: 1.05;
-      font-weight: 400;
-      letter-spacing: -3px;
-      max-width: 760px;
-      margin: 60px 0 28px;
-    }
-    h1 span {
-      color: #65784e;
-    }
-    .sub {
-      font-size: 26px;
-      line-height: 1.6;
-      max-width: 680px;
-      color: #5d6a54;
-    }
-    .card {
-      position: absolute;
-      right: 75px;
-      top: 355px;
-      transform: rotate(4deg);
-      width: 500px;
-      padding: 34px;
-      background: #fffefa;
-      border: 1px solid #d7dfc9;
-      border-radius: 17px;
-      box-shadow: 0 20px 80px #254d3d12;
-    }
-    .label {
-      font-size: 13px;
-      letter-spacing: 2px;
-      color: #5d6a54;
-    }
-    .card h2 {
-      font-family: Serif, serif;
-      font-size: 37px;
-      line-height: 1.2;
-      font-weight: 400;
-      margin: 24px 0;
-    }
-    .card p {
-      font-size: 19px;
-      line-height: 1.7;
-      background: #f1f4e7;
-      padding: 23px;
-      border: 1px solid #e0e6d1;
-      border-radius: 10px;
-      color: #526a44;
-    }
-    .source {
-      font-size: 14px;
-      color: #4e6c3e;
-    }
-    .blank {
-      position: absolute;
-      right: 179px;
-      bottom: 145px;
-      background: #eee4c8;
-      border: 1px solid #dccda8;
-      border-radius: 11px;
-      padding: 18px 25px;
-      font-size: 18px;
-      color: #725b2c;
-      transform: rotate(-3deg);
-    }
-    footer {
-      position: absolute;
-      bottom: 65px;
-      left: 90px;
-      right: 90px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 17px;
-      color: #60704e;
-      border-top: 1px solid #d7decc;
-      padding-top: 23px;
-    }
-    .pill {
-      border: 1px solid #cfd9bd;
-      background: #e8eed8;
-      border-radius: 30px;
-      padding: 11px 20px;
-      font-size: 15px;
-    }
-    .caption {
-      position: absolute;
-      right: 100px;
-      bottom: 104px;
-      font-size: 12px;
-      color: #657354;
-    }
-  </style>
-  <div class="brand"><span class="mark">c</span>clearpath.</div>
-  <h1>More possibility.<br /><span>Less paperwork.</span></h1>
-  <p class="sub">
-    Understand the question.<br />Draft from your own notes.<br />Keep the final
-    say.
-  </p>
-  <div class="card">
-    <span class="label">IN PLAIN ENGLISH</span>
-    <h2>What happened, and how is it making college harder?</h2>
-    <p>
-      “My laptop stopped working. The library lab closes before I finish work.”
+  <head>
+    <meta charset="utf-8" />
+    <title>Clearpath — answer the whole question</title>
+    <style>
+      @font-face {
+        font-family: DM;
+        src: url("/node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2");
+      }
+      @font-face {
+        font-family: Serif;
+        src: url("/node_modules/@fontsource/dm-serif-display/files/dm-serif-display-latin-400-normal.woff2");
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        width: 1500px;
+        height: 1000px;
+        padding: 65px 75px;
+        background: #f5f4ee;
+        color: #244d3d;
+        font-family: DM, sans-serif;
+        position: relative;
+        overflow: hidden;
+      }
+      .brand {
+        font-size: 36px;
+        letter-spacing: -1px;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+      }
+      .mark {
+        background: #245747;
+        color: #e9f1bd;
+        width: 53px;
+        height: 53px;
+        border-radius: 15px 15px 15px 3px;
+        display: grid;
+        place-items: center;
+        font:
+          44px Serif,
+          serif;
+      }
+      .kicker {
+        margin-top: 90px;
+        font-size: 14px;
+        letter-spacing: 2px;
+        color: #5d6a54;
+      }
+      h1 {
+        font:
+          78px/1.08 Serif,
+          serif;
+        letter-spacing: -2px;
+        max-width: 610px;
+        margin: 25px 0 30px;
+      }
+      h1 span {
+        color: #65784e;
+      }
+      .sub {
+        max-width: 530px;
+        font-size: 25px;
+        line-height: 1.6;
+        color: #5d6a54;
+      }
+      .note {
+        margin-top: 50px;
+        max-width: 480px;
+        border-left: 3px solid #b6c39e;
+        padding: 0 0 0 20px;
+        font-size: 18px;
+        line-height: 1.7;
+        color: #526340;
+      }
+      .card {
+        position: absolute;
+        right: 75px;
+        top: 185px;
+        width: 580px;
+        border: 1px solid #d0d8c5;
+        border-radius: 12px;
+        background: #fffefa;
+        box-shadow: 0 14px 42px #254d3d0d;
+        padding: 35px;
+      }
+      .label {
+        font-size: 12px;
+        letter-spacing: 1.6px;
+        color: #5d6a54;
+      }
+      .card h2 {
+        font:
+          36px/1.2 Serif,
+          serif;
+        margin: 18px 0 22px;
+      }
+      .question {
+        font-size: 16px;
+        line-height: 1.6;
+        padding-bottom: 24px;
+        border-bottom: 1px solid #dde1d4;
+        color: #536348;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 19px 0;
+        border-bottom: 1px solid #e6e9df;
+        font-size: 18px;
+      }
+      .number {
+        width: 27px;
+        height: 27px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #e9efdd;
+        color: #4a6540;
+        font-size: 14px;
+      }
+      .row small {
+        margin-left: auto;
+        color: #536b44;
+        font-size: 12px;
+      }
+      .gap .number {
+        background: #f3e7ca;
+        color: #795c27;
+      }
+      .gap small {
+        color: #795c27;
+      }
+      .card-foot {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #5d6a54;
+        margin: 24px 0 0;
+      }
+      .caption {
+        position: absolute;
+        right: 88px;
+        bottom: 146px;
+        font-size: 12px;
+        color: #5d6a54;
+      }
+      footer {
+        position: absolute;
+        bottom: 64px;
+        left: 75px;
+        right: 75px;
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #d5ddca;
+        padding-top: 23px;
+        font-size: 15px;
+        color: #5d6a54;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="brand"><span class="mark">c</span>clearpath.</div>
+    <div class="kicker">APPLICATIONS, ONE PART AT A TIME</div>
+    <h1>It sounds finished.<br /><span>What’s missing?</span></h1>
+    <p class="sub">
+      Find the parts your answer left out.<br />Supply your details. Review the
+      result.
     </p>
-    <span class="source">✓ Source excerpt beside your draft</span>
-  </div>
-  <div class="blank">Unknown amount? Ask. Don’t guess.</div>
-  <span class="caption">Fictional applicant · illustrative draft</span>
-  <footer>
-    <span>GATOR HACK V · 2026</span><span class="pill">Built with Gemma 4</span>
-  </footer>
+    <p class="note">
+      Maya explained her broken laptop.<br />The question asked for more.
+    </p>
+    <div class="card">
+      <span class="label">ONE QUESTION · FOUR SUGGESTED PARTS</span>
+      <h2>Two details still need Maya.</h2>
+      <p class="question">
+        Describe the unexpected expense and how it affects your coursework.
+        Include the amount you are requesting and any other financial help you
+        have already tried.
+      </p>
+      <div class="row">
+        <span class="number">1</span><span>Unexpected expense</span
+        ><small>In her notes</small>
+      </div>
+      <div class="row">
+        <span class="number">2</span><span>Effect on coursework</span
+        ><small>In her notes</small>
+      </div>
+      <div class="row gap">
+        <span class="number">3</span><span>Amount requested</span
+        ><small>Ask Maya</small>
+      </div>
+      <div class="row gap">
+        <span class="number">4</span><span>Other help tried</span
+        ><small>Ask Maya</small>
+      </div>
+      <p class="card-foot">
+        The applicant checks the breakdown against the original question.
+      </p>
+    </div>
+    <span class="caption">Fictional example · illustrative breakdown</span>
+    <footer>
+      <span>GATOR HACK V · 2026</span><span>Gemma 4 · React · TypeScript</span>
+    </footer>
+  </body>
 </html>

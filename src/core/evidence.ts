@@ -1,6 +1,6 @@
 import type { Application, Source, DraftResult } from "./types";
 import { z } from "zod";
-import { fieldError } from "./workspace";
+import { fieldError } from "./field-validation";
 
 const rawSchema = z.object({
   answers: z
@@ -30,6 +30,40 @@ const rawSchema = z.object({
     .optional(),
 });
 
+function numericValue(token: string): string | null {
+  const value = token.replace(/[$€£\s]/g, "").replace("−", "-");
+  if (!/^[+-]?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value)) return null;
+  const negative = value.startsWith("-");
+  const [whole, fraction = ""] = value
+    .replace(/^[+-]/, "")
+    .replace(/,/g, "")
+    .split(".");
+  const integer = whole.replace(/^0+(?=\d)/, "");
+  const decimal = fraction.replace(/0+$/, "");
+  const magnitude = integer + (decimal ? `.${decimal}` : "");
+  return negative && magnitude !== "0" ? `-${magnitude}` : magnitude;
+}
+
+function hasNumericValue(quote: string, value: string): boolean {
+  const wanted = numericValue(value.trim());
+  if (wanted === null) return false;
+  // Preserve signs and whole tokens, including unsupported decimal/exponent
+  // forms, so a fragment cannot be mistaken for the requested amount.
+  const tokens =
+    quote.match(
+      /(?<![\p{L}\p{N}_.,])[+−-]?\s*[$€£]?\s*\d(?:[\d,]*\d)?(?:\.\d+)?(?:[eE][+−-]?\d+)?(?![\p{L}\p{N}_]|[.,]\d)/gu,
+    ) ?? [];
+  return tokens.some((token) => numericValue(token) === wanted);
+}
+
+function hasEmailValue(quote: string, value: string): boolean {
+  const tokens =
+    quote.match(
+      /[\p{L}\p{M}\p{N}.!#$%&'*+/=?^_`{|}~-]+@[\p{L}\p{M}\p{N}](?:[\p{L}\p{M}\p{N}.-]*[\p{L}\p{M}\p{N}])?(?![\p{L}\p{M}\p{N}_.@-])/gu,
+    ) ?? [];
+  return tokens.some((token) => token.toLowerCase() === value.toLowerCase());
+}
+
 export function validateSuggestions(
   application: Application,
   sources: Source[],
@@ -56,18 +90,11 @@ export function validateSuggestions(
         ? []
         : [{ ...item, start, end: start + item.quote.length }];
     });
-    const numbers = evidence.flatMap((e) =>
-      [...e.quote.matchAll(/\d[\d,]*(?:\.\d{1,2})?/g)].map((m) =>
-        Number(m[0].replace(/,/g, "")),
-      ),
-    );
     const unsupportedScalar =
       field?.kind === "number"
-        ? !numbers.includes(Number(proposal.value))
+        ? !evidence.some((e) => hasNumericValue(e.quote, proposal.value))
         : field?.kind === "email"
-          ? !evidence.some((e) =>
-              e.quote.toLowerCase().includes(proposal.value.toLowerCase()),
-            )
+          ? !evidence.some((e) => hasEmailValue(e.quote, proposal.value))
           : false;
     const reason = !field
       ? "Unknown question."
@@ -98,7 +125,10 @@ export function validateSuggestions(
 }
 
 const normalizeLabel = (value: string) =>
-  value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  value
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{M}\p{N}]/gu, "");
 
 export function exactMatches(
   application: Application,
@@ -106,14 +136,12 @@ export function exactMatches(
 ): DraftResult {
   const result: DraftResult = { answers: {}, rejected: [] };
   for (const field of application.fields) {
+    const label = normalizeLabel(field.label);
+    if (!label) continue;
     const matches = sources.flatMap((source) =>
       source.text.split(/\r?\n/).flatMap((line) => {
         const separator = line.indexOf(":");
-        if (
-          separator < 0 ||
-          normalizeLabel(line.slice(0, separator)) !==
-            normalizeLabel(field.label)
-        )
+        if (separator < 0 || normalizeLabel(line.slice(0, separator)) !== label)
           return [];
         const value = line.slice(separator + 1).trim();
         if (!value || fieldError(field, value)) return [];

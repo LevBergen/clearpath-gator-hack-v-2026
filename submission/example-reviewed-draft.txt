@@ -1,4 +1,4 @@
-Student support fund
+The missing-details challenge
 
 Prepared with Clearpath · Not submitted
 
@@ -8,27 +8,25 @@ Full name
 Maya Chen
 Source my-notes: “Full name: Maya Chen”
 
-University email address
+Email address
 maya.chen@example.edu
-Source my-notes: “University email address: maya.chen@example.edu”
+Source my-notes: “Email address: maya.chen@example.edu”
 
-Current degree program and year of study
-Second-year environmental engineering student.
-Source my-notes: “Current degree program and year of study: Second-year environmental engineering student.”
+Degree program and year
+Second-year environmental engineering
+Source my-notes: “Degree program and year: Second-year environmental engineering”
 
-Describe the unforeseen circumstances necessitating financial assistance and the resulting impediment to academic participation.
-My laptop stopped working on Monday. I need it for CAD assignments and online coursework. I have been using library computers, but the lab closes before I finish my evening shift. I work at the campus cafe three evenings a week.
-Source my-notes: “My laptop stopped working on Monday. I need it for CAD assignments and online coursework.
-I have been using library computers, but the lab closes before I finish my evening shift.
-I work at the campus cafe three evenings a week.”
+Describe the unexpected expense and how it affects your coursework. Include the amount you are requesting and any other financial help you have already tried.
+My laptop stopped working on Monday.
 
-Amount requested
-450
+I need CAD software for weekly design assignments. The library lab closes before I finish my evening shift at the campus cafe. I am behind on a design assignment.
+
+I am requesting 450 dollars.
+
+I have not tried other financial help yet.
 Entered by applicant.
-
-Explain how the requested disbursement will directly facilitate the continuation of your academic pursuits.
-A refurbished laptop would let me finish assignments at home after work.
-Source my-notes: “A refurbished laptop would let me finish assignments at home after work.”
-
-Additional information
-Not provided (optional)
+Question parts checked by applicant:
+- unexpected expense: My laptop stopped working on Monday.
+- coursework effect: I need CAD software for weekly design assignments. The library lab closes before I finish my evening shift at the campus cafe. I am behind on a design assignment.
+- amount requested: I am requesting 450 dollars.
+- other financial help: I have not tried other financial help yet.

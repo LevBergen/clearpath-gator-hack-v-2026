@@ -18,7 +18,13 @@ export function parseForm(text: string): Application {
     .map((line) => line.trim())
     .filter(Boolean);
   const looksLikeQuestion = (s: string) =>
-    /^(?:\d+[.)]|[-*]\s)|[?:*]$|\b(?:name|email|address|phone)\b/i.test(s);
+    /^(?:\d+[.)]|[-*]\s)|[?:*]$/.test(s) ||
+    /^(?:describe|explain|tell (?:us|me)|provide|list|enter|select|choose|indicate|outline|summari[sz]e|write|share|who|what|when|where|why|how|which|do|does|did|are|is|have|has|can|will|would)\b/i.test(
+      s,
+    ) ||
+    /^(?:(?:your|full|first|last|preferred|contact|university|current|home|mailing)\s+)*(?:name|e-?mail(?: address)?|address|phone(?: number)?|amount(?: requested)?|budget)$/i.test(
+      s,
+    );
   const hasTitle = lines.length > 1 && !looksLikeQuestion(lines[0]);
   const title = hasTitle
     ? lines
@@ -26,17 +32,33 @@ export function parseForm(text: string): Application {
         .replace(/^#+\s*/, "")
         .slice(0, 160)
     : "My application";
+  if (!title.trim()) throw new Error("Add a title before your questions.");
   if (lines.length > 30)
     throw new Error("Import up to 30 questions at a time.");
   const fields: Field[] = lines.map((line, index) => {
     const optional = /\(optional\)|\[optional\]/i.test(line);
-    const limit = line.match(
-      /\(\s*(?:max(?:imum)?\s*)?(\d+)\s*characters?\s*\)/i,
+    const limitPattern =
+      /\(\s*(?:max(?:imum)?\b[^()]*|[+-]?(?:\d|\.)[^()]*)characters?\s*\)/gi;
+    const limits = [...line.matchAll(limitPattern)];
+    const limit = limits[0]?.[0].match(
+      /^\(\s*(?:max(?:imum)?\s*)?(\d+)\s*characters?\s*\)$/i,
     );
+    const maxLength = limit ? Number(limit[1]) : undefined;
+    if (
+      limits.length > 1 ||
+      (limits.length > 0 &&
+        (maxLength === undefined ||
+          !Number.isSafeInteger(maxLength) ||
+          maxLength < 1 ||
+          maxLength > 6000))
+    )
+      throw new Error(
+        "Use one character limit per question, a whole number from 1 to 6,000.",
+      );
     const label = line
       .replace(/^\s*(?:\d+[.)]\s*|[-*]\s+)/, "")
       .replace(/\(optional\)|\[optional\]/gi, "")
-      .replace(/\(\s*(?:max(?:imum)?\s*)?\d+\s*characters?\s*\)/gi, "")
+      .replace(limitPattern, "")
       .replace(/[:*\s]+$/, "")
       .trim();
     if (!label || label.length > 800)
@@ -64,7 +86,7 @@ export function parseForm(text: string): Application {
       required: !optional,
       kind,
       plainLanguage: guide(label, kind),
-      ...(limit ? { maxLength: Math.min(Number(limit[1]), 6000) } : {}),
+      ...(maxLength === undefined ? {} : { maxLength }),
     };
   });
   return {
