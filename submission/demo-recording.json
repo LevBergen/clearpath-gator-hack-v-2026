@@ -1,0 +1,37 @@
+{
+  "durationSeconds": 138.84,
+  "narration": "Synthetic macOS Samantha voice",
+  "fictionalData": true,
+  "liveModel": "gemma-4-26b-a4b-it",
+  "waitingTimeRetained": true,
+  "segments": [
+    {
+      "segment": 0,
+      "duration": 17.162
+    },
+    {
+      "segment": 1,
+      "duration": 20.031
+    },
+    {
+      "segment": 2,
+      "duration": 21.119
+    },
+    {
+      "segment": 3,
+      "duration": 18.422
+    },
+    {
+      "segment": 4,
+      "duration": 18.131
+    },
+    {
+      "segment": 5,
+      "duration": 19.83
+    },
+    {
+      "segment": 6,
+      "duration": 22.645
+    }
+  ]
+}
